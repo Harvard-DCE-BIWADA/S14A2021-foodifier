@@ -1,0 +1,19 @@
+﻿1. Project Name
+   1. foodifier
+2. Team Members & Roles
+   1. Arda Egrioglu
+   2. Alden Eberts
+3. Meeting Times
+   1. 3 pm EST Monday and Friday/Saturday/Sunday
+   2. 4. Zoom URL (if applicable)
+   1. https://harvard.zoom.us/j/94705248192?pwd=UGk0Q1FkQjdjUVhncUpJSnFCK1ZWZz09
+5. Github URL
+   1. https://github.com/Harvard-DCE-BIWADA/S14A2021-foodifier
+6. Heroku URL (will be filled in later)
+7. Project Purpose
+   1.  Summary: To classify and then identify the calories of different foods
+   2. The app will be used as a diet app to see and calculate your daily calorie intake so that you can eat your foods accordingly
+8. Basic layout and structure of the project
+   1. N/A
+9. References to any code/papers/projects that your project is based on.
+   1. https://github.com/stratospark/food-101-keras
