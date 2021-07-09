@@ -21,11 +21,11 @@ def submit_image():
 def calories():
 	return render_template("calories.html") #shows the calories from the image
 
-@app.route('daily_total')
+@app.route('/daily_total')
 def daily_total():
     return render_template("daily.html")
 
-@app.route('weekly_total')
+@app.route('/weekly_total')
 def weekly_total():
     return render_template("weekly.html")
     
