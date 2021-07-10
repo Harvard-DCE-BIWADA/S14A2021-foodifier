@@ -58,4 +58,6 @@ ALL
 
 # References & Citations
 
+Canva: Yellow with Teal Fork Food Festival Template
+Food calorie API: https://developer.edamam.com/food-database-api-docs
 
