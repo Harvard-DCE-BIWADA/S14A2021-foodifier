@@ -19,7 +19,7 @@ def create_account():
 def login():
     return render_template("index.html") # page to login to your account so you can access previous data
 
-@app.route('profile')
+@app.route('/profile')
 def profile():
     return render_template('index.html') # where the user can set up their profile/calorie goals etc...
 
@@ -43,7 +43,7 @@ def daily_total():
 def weekly_total():
     return render_template("weekly.html") # shows the weekly dashboard/weekly total stats for the user
 
-@app.route('history')
+@app.route('/history')
 def history():
     return render_template('index.html') # shows previous meals/calorie counts from either previous days or weeks
 

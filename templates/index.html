@@ -1,24 +1,15 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"
-              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Foodifier</title>
+{% extends "layout.html" %}
+{% block scripts %}
+{% endblock %}
+{% block content %}
+<header class = "container">
+    <h1>D3 from the DB</h1>
+    <h2 id="users">Users: </h2>
+</header>
+<div class="slide">
+    <div id="vis1" class="vis"></div>
+    <!--div id="vis2" class="vis"></div>
+    <div id="vis3" class="vis"></div-->
+</div>
+{% endblock %}
 
-        <!-- Styles -->
-        <link href="{{ url_for('static', filename='./css/index.css') }}" rel="stylesheet">
-    </head>
-    <body>
-        {% extends "layout.html" %}
-        {% block scripts %}
-        
-        {% endblock %}
-        {% block content %}
-        
-        {% endblock %}
-
-
-    </body>
-</html>
