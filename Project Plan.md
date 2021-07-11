@@ -10,7 +10,7 @@
 
 **Website Design Template**: https://www.webmd.com/diet/healthtool-food-calorie-counter
 
-**Website Location**: N/A
+**Website Location**: https://foodifier.herokuapp.com/
 
 ### Team Members
 
@@ -31,21 +31,21 @@ General description of how the project will work
 
 /app/static			- Static files, etc.
 
-/framework/			- ???.
+/framework/			- The models that we are going to use
 
 The main components of the app are:
 
 1. **Base** - This module contains the skeleton that the entire framework rests on. It is responsible
 for checking for compatibility, as well as loading and securing the various sub-modules.
 
-2. **Component X** - This component does X. It uses Google Tensorflow to do ...
+2. **Tenserflow model** - The model we use to classify the foods.
 
-3. **Component Y** - This component does Y. It uses Z to add W features.
+3. **Food API** - The API we use to determine the calories of food.
 
 ## Project Timeline
 
 Milestone 1: The creation of this document, and development of the project plan and basic structure.
-Milestone 2: Doing the ground work for our Minimum Viable Product.
+Milestone 2: Doing the ground work for our Minimum Viable Product and catching up on milestone 1
 Milestone 3: ???
 Milestone 4: ???
 Milestone 5: ???

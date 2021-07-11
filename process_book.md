@@ -12,7 +12,7 @@ CSCI S14A - Building Interactive Web Applications for Data Analysis
 
 **Website Design Template**: https://www.webmd.com/diet/healthtool-food-calorie-counter
 
-**Website Location**: N/A
+**Website Location**: https://foodifier.herokuapp.com/
 
 ### Team Members
 
@@ -40,8 +40,8 @@ All:
 
 Arda Eğrioğlu
 
-1. sketches of the desired user interface, and how the pages/routes in the app work together. **In Process**
-2. Look through and decide which api we are going to use (or multiple) to get the nutritional information for our app **IN PROCESS**
+1. sketches of the desired user interface, and how the pages/routes in the app work together. **Complete**
+2. Look through and decide which api we are going to use (or multiple) to get the nutritional information for our app **Complete**
 3. transfer the process book and project plan to the templates that were sent earlier in this channel **Complete**
 
 Alden Eberts
@@ -52,12 +52,21 @@ Alden Eberts
 
 ALL
 
-1. Task 1 **COMPLETE**
-2. Task 2 **IN PROCESS**
-3. Task 3 **IN PROCESS**
+# Milestone 3 Tasks
+
+Arda Eğrioğlu
+
+
+
+
+Alden Eberts
+
 
 # References & Citations
 
 Canva: Yellow with Teal Fork Food Festival Template
 Food calorie API: https://developer.edamam.com/food-database-api-docs
+    ID: c344f636
+    KEY: d2f4167ff9fc425ee9b8e5569d56e8f5	—
+
 
