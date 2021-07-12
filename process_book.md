@@ -32,7 +32,7 @@ All:
 1. Choose team member and roles **COMPLETE**
 2. Meeting times **COMPLETE**
 3. ZOOM URL **COMPLETE**
-4. Heroku URL **In Process**
+4. Heroku URL **COMPLETE**
 5. Project Purpose **COMPLETE**
 6. References to any code/papers/projects that your project is based on **In Process**
 
@@ -47,8 +47,8 @@ Arda Eğrioğlu
 Alden Eberts
 
 1. Come up with the routes for the flask app  and then put them in to the app.py (they do not need to return a different html template yet) **COMPLETE**
-2. Create a first model using the images (looking through the tensorflow tutorials and probably a jupyter notebook) **IN PROCESS**
-3. Implement your layout.html and index.html templates using any CSS styles you think are appropriate for your app. You may use bootstrap, or use templates you find on the web (html5up.net is a good resource). Any new templates should also extend layout.html and use the css styles you've chosen. **IN PROCESS**
+2. Create a first model using the images (looking through the tensorflow tutorials and probably a jupyter notebook) **IN PROCESS: CODE MADE BUT MODEL IS NOT PICKLED AND IS BAD**
+3. Implement your layout.html and index.html templates using any CSS styles you think are appropriate for your app. You may use bootstrap, or use templates you find on the web (html5up.net is a good resource). Any new templates should also extend layout.html and use the css styles you've chosen. **COMPLETE**
 
 ALL
 
@@ -68,5 +68,7 @@ Canva: Yellow with Teal Fork Food Festival Template
 Food calorie API: https://developer.edamam.com/food-database-api-docs
     ID: c344f636
     KEY: d2f4167ff9fc425ee9b8e5569d56e8f5	—
+
+https://startbootstrap.com/template/business-frontpage - Used this template as a basis for layout.html
 
 
