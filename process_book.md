@@ -55,11 +55,15 @@ ALL
 # Milestone 3 Tasks
 
 Arda Eğrioğlu
-
-
+1. Fix directories
+2. Link db to login register
+3. dahsboard db
 
 
 Alden Eberts
+1. Implement a somewhat working model
+2. Image upload and take picture 
+3. API stuff
 
 
 # References & Citations
