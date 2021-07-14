@@ -65,10 +65,23 @@ Alden Eberts
 # References & Citations
 
 Canva: Yellow with Teal Fork Food Festival Template
+
 Food calorie API: https://developer.edamam.com/food-database-api-docs
     ID: c344f636
     KEY: d2f4167ff9fc425ee9b8e5569d56e8f5	—
 
 https://startbootstrap.com/template/business-frontpage - Used this template as a basis for layout.html
+
+https://blog.slinto.sk/tensorflow-on-heroku-good-idea-3e6904105892
+
+https://arifulislam-ron.medium.com/flask-web-application-to-classify-image-using-vgg16-
+
+https://medium.com/@limkenghin/deploying-tensorflow-2-0-model-on-heroku-1b5cd49f8a2 
+
+https://www.tensorflow.org/tutorials/images/classification
+
+https://github.com/faizan170/tensorflow-image-classification-flask-deployment
+
+https://bhashkarkunal.medium.com/image-classification-api-creation-using-tensorflow-flask-mongodb-61a53835e62d
 
 
