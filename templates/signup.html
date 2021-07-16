@@ -12,7 +12,7 @@
 
     <form method="POST" action="/user/create" novalidate>
         {{ form.hidden_tag() }}
-
+        
         <div class="form-group">
             {{ form.username.label }}<br>
             {{ form.username(size=32) }}<br>
