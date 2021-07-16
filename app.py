@@ -118,7 +118,7 @@ def signup():
 
 @app.route('/profile')
 def profile():
-    return render_template('Dashboard.html') # where the user can set up their profile/calorie goals etc...
+    return render_template('Dashboard.html', session_username = session['username']) # where the user can set up their profile/calorie goals etc...
 
 @app.route('/about')
 def extra_info():
