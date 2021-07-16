@@ -1,31 +1,117 @@
 from dotenv import load_dotenv
-from os import environ
-from flask import Flask, render_template, jsonify
+from os import environ, error
+from flask import Flask, flash, render_template, request, url_for, redirect, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
+from models.models import Db, User, Post
+from forms.forms import SignupForm, LoginForm
+from passlib.hash import sha256_crypt
+import gunicorn
 
+# Load environment
+load_dotenv('.env')
 
 # Initialize app
 app = Flask(__name__)
+app.secret_key = environ.get('SECRET_KEY')
+
+# Initialize DB
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL').replace('postgres://', 'postgresql://') # this is to solve a bug in heroku
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+print(environ.get('DATABASE_URL'))
+Db.init_app(app)
 
 @app.route('/')
 def index():
-    return render_template("index.html") # home page --> give idea of app/introduces the product 
+    print(session)
+    return render_template('index.html')
+    
+     # home page --> give idea of app/introduces the product 
 
-@app.route('/create_account')
-def create_account():
-    return render_template("index.html") # page to create an account to save weekly/dail data + previous meals (maybe give suggestions) (index.html is a placeholder template)
+@app.route('/user/create',  methods=['POST'])
+def user_create():
+    
+    # Init credentials from form request
+    username = request.form['username']
+    password = request.form['password']
 
-@app.route('/login')
+    # Init user from Db query
+    existing_user = User.query.filter_by(username=username).first()
+
+    # Control new credentials
+    if username == '' or existing_user:
+        flash('The username already exists. Please pick another one.')
+        print("error")
+        return redirect(url_for('signup'))
+    else:
+        user = User(username=username, password=sha256_crypt.hash(password))
+        Db.session.add(user)
+        Db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
+
+
+
+    
+
+    
+    
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template("index.html") # page to login to your account so you can access previous data
+
+    # Init form
+    form = LoginForm()
+
+    # If post
+    if request.method == 'POST':
+
+        # Init credentials from form request
+        username = request.form['username']
+        password = request.form['password']
+
+        # Init user by Db query
+        user = User.query.filter_by(username=username).first()
+        print(user)
+
+        # Control login validity
+        if user is None or not sha256_crypt.verify(password, user.password):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        else:
+            session['username'] = username
+            return redirect(url_for('profile'))
+
+    # If GET
+    else:
+        return render_template('login.html', title='Login', form=form)
+
+
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    # Logout
+    session.clear()
+    return redirect(url_for('index'))
+    
+
+
+@app.route('/signup')
+def signup():
+    # Init form
+    form = SignupForm()
+
+    return render_template( 'signup.html', title='Signup', form=form )
+    
+
 
 @app.route('/profile')
 def profile():
-    return render_template('index.html') # where the user can set up their profile/calorie goals etc...
+    return render_template('Dashboard.html') # where the user can set up their profile/calorie goals etc...
 
-@app.route('/info')
+@app.route('/about')
 def extra_info():
-    return render_template("index.html") # adds additional information about the food and health concepts + about how the model works and apis + resources
+    return render_template("about.html") # adds additional information about the food and health concepts + about how the model works and apis + resources
 
 @app.route('/submit_image')
 def submit_image():
