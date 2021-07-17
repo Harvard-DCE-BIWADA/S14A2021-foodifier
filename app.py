@@ -12,6 +12,8 @@ import numpy as np
 from werkzeug.utils import secure_filename
 from keras.models import Sequential, load_model
 from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
+import tensorflow as tf
+import requests
 
 # Load environment
 load_dotenv('.env')
@@ -124,6 +126,7 @@ def profile():
 def extra_info():
     return render_template("about.html") # adds additional information about the food and health concepts + about how the model works and apis + resources
 
+#ADAPTED FROM https://github.com/mitkir/keras-flask-image-classifier
 @app.route('/submit_image', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
@@ -133,13 +136,58 @@ def upload_file():
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
-            output = predict(file_path)
-    #return render_template("home.html", label=output, imagesource=file_path)
-    return render_template("submit.html") # area where you can submit the image for recognition 
+            
+            probs, output = predict(file_path)
+            print(output)
+            class_names = ['frozen_yogurt', 'hot_dog', 'pizza']
 
-@app.route('/calories')
-def calories():
-	return render_template("calories.html") # shows the calories from the image (maybe not just calories)
+            print(
+                "This image most likely belongs to {}"
+                .format(class_names[np.argmax(probs)])
+            )
+    #return render_template("home.html", label=output, imagesource=file_path)
+        print(file_path)
+        return render_template("submit.html", label = output, imagesource = file_path, prediction = class_names[np.argmax(probs)]) # area where you can submit the image for recognition 
+    return render_template("submit.html")
+@app.route('/calories/<foodname>')
+def calories(foodname):
+    html_food_name = foodname.replace("_", " ")
+    foodname = foodname.replace("_", "%20")
+    print(html_food_name)
+    info = requests.get(f"https://api.edamam.com/api/food-database/v2/parser?app_id=c344f636&app_key=d2f4167ff9fc425ee9b8e5569d56e8f5&ingr={foodname}&nutrition-type=logging&category=generic-foods").json()
+    try:
+        calories = info["parsed"][0]["food"]["nutrients"]["ENERC_KCAL"]
+    except:
+        try:
+            calories = info["hints"][0]["food"]["nutrients"]["ENERC_KCAL"]
+        except:
+            calories = "No Information Available"
+    try:
+        protein = info["parsed"][0]["food"]["nutrients"]["PROCNT"]
+    except:
+        try:
+            protein = info["hints"][0]["food"]["nutrients"]["PROCNT"]
+        except:
+            protein = "No Information Available"
+    try:
+        fat = info["parsed"][0]["food"]["nutrients"]["FAT"]
+    except:
+        try:
+            fat = info["hints"][0]["food"]["nutrients"]["FAT"]
+        except:
+            fat = "No Information Available"
+
+    try:
+        fibre = info["parsed"][0]["food"]["nutrients"]["FIBTG"]
+    except:
+        try:
+            fibre = info["hints"][0]["food"]["nutrients"]["FIBTG"]
+        except:
+            fibre = "No Information Available"
+
+    print(f"calories: {calories}\nprotein: {protein}\nfat: {fat}\nfibre: {fibre}")
+    return render_template("calories.html", name=html_food_name, calories=calories, protein=protein, fat=fat, fibre=fibre) # shows the calories from the image (maybe not just calories)
+    
 
 @app.route('/daily_total')
 def daily_total():
@@ -159,7 +207,7 @@ def history():
 allowed_extensions = set(["jpg", "jpeg", "png"])
 image_size = (600, 600)
 
-#model = load_model('notebooks/saved_model.pb')  
+model = load_model('/mnt/c/Users/simon/Desktop/food-101-demo-model')  
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -167,8 +215,11 @@ def allowed_file(filename):
 
 def predict(file):
     img = load_img(file, target_size = image_size)
-    img = img_to_array(img)/255.0
+    img = img_to_array(img)
     img = np.expand_dims(img, axis=0)
     probs = model.predict(img)[0]
-    return probs
+    print(probs)
+    output = {'Frozen Yogurt' : probs[0], "Hot Dog" : probs[1], "Pizza" : probs[2]}
+    #score = tf.nn.softmax(probs[0])
+    return probs, output
 
