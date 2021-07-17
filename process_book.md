@@ -68,6 +68,8 @@ Alden Eberts
 
 # References & Citations
 
+DEMO MODEL - https://drive.google.com/drive/folders/1ZTFDsny9M3-YL79Dr6yLNrDviNXrGCut?usp=sharing
+
 Canva: Yellow with Teal Fork Food Festival Template
 
 Food calorie API: https://developer.edamam.com/food-database-api-docs
