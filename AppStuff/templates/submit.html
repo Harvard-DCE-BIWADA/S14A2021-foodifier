@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block scripts %}
+{% endblock %}
+{% block content %}
+{% if not label %}
+<form action="/submit_image" method=post enctype=multipart/form-data>
+    <input type=file name=file>
+    <input type=submit value=Upload>
+</form>
+{% endif %}
+{# ADAPTED FROM https://github.com/mitkir/keras-flask-image-classifier #}
+{% if label %}
+<div class="col-lg-4">
+    <div class="page-header">
+        <h3 id="tables">Result</h3>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr class="table-active">
+                <th scope="col" rowspan = "3">Image</th>
+                <th scope="col" colspan = "3">Predict</th>
+            </tr>
+        </thead>
+        <tr>
+            <th scope="row" rowspan = "4"> <img width="600" height="600" src="../{{imagesource}}" /> </th>
+            {% for key, val in label.items() %}
+                <tr>
+                    <td> {{key}}: {{val}} </td>
+                </tr>
+            {% endfor %}
+        </tr>
+        
+    </table> 
+    <button class = "btn btn-light"><a href="/calories/{{prediction}}">Get Calories</a></button>
+</div>
+{% endif %}
+{% endblock %}

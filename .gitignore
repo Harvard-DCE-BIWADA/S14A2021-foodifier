@@ -1,6 +1,0 @@
-.DS_store
-.idea
-*/.ipynb_checkpoints/*
-*/.env
-*/__pycache__
-*/notebooks/variables
