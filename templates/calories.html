@@ -1,3 +1,4 @@
+{% set logged_in = True %}
 {% extends "layout.html" %}
 {% block scripts %}
 {% endblock %}
@@ -31,5 +32,8 @@
     </tr>
     
 </table> 
-<button class = "btn btn-light"><a href="#">Add Food</a></button>
+<form method="post" action='/calories/{{calories}}'>
+    <button class = "btn btn-light">Add Food</button>
+</form>
+
 {% endblock %}

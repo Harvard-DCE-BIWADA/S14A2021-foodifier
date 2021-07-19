@@ -1,11 +1,14 @@
 import os
+
+from flask.helpers import total_seconds
 from dotenv import load_dotenv
 from os import environ, error
 from flask import Flask, flash, render_template, request, url_for, redirect, jsonify, session, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
-from models.models import Db, User, Post
-from forms.forms import SignupForm, LoginForm
+from models.models import Db, User, UserGoals
+#from models.goals import UserGoals
+from forms.forms import SignupForm, LoginForm, UpdateGoals
 from passlib.hash import sha256_crypt
 import gunicorn
 import numpy as np
@@ -31,13 +34,15 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 print(environ.get('DATABASE_URL'))
 Db.init_app(app)
 
-
-
-
+global total_calories
+total_calories = 0
 @app.route('/')
 def index():
     print(session)
-    return render_template('index.html')
+    if 'username' in session:
+        return render_template('index.html', logged_in = True)
+    else:
+        return render_template('index.html', logged_in = False)
     
      # home page --> give idea of app/introduces the product 
 
@@ -57,9 +62,13 @@ def user_create():
         print("error")
         return redirect(url_for('signup'))
     else:
-        user = User(username=username, password=sha256_crypt.hash(password))
+        user = User(username=username, password=sha256_crypt.hash(password))        
         Db.session.add(user)
         Db.session.commit()
+        #user = User.query.filter_by(username=username).first()
+        #print(user.uid)
+        #user_goals = UserGoals(uid = user.uid, weeklyg = 0, weekly = 0, dailyg = 1000, daily = 0)
+        #Db.session.add(user_goals)
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
 
@@ -104,6 +113,8 @@ def login():
 @app.route('/logout', methods=['POST'])
 def logout():
     # Logout
+    global total_calories
+    total_calories = 0
     session.clear()
     return redirect(url_for('index'))
     
@@ -115,17 +126,41 @@ def signup():
     form = SignupForm()
 
     return render_template( 'signup.html', title='Signup', form=form )
-    
-
-
+"""
+@app.route('/edit_goals')
+def edit_goals():
+    form = UpdateGoals()
+    return render_template('form.html', form=form)
+"""
 @app.route('/profile')
 def profile():
-    return render_template('Dashboard.html', session_username = session['username']) # where the user can set up their profile/calorie goals etc...
-
+    if 'username' in session: 
+        if session['username'] != '':
+            user = User.query.filter_by(username=session['username']).first()
+            uid = user.uid
+            print(uid)
+            global total_calories
+            user_goals = UserGoals.query.filter_by(uid=uid).first()
+            return render_template('Dashboard.html', session_username = session['username'],calories=total_calories, daily_goal = str(2000)) # where the user can set up their profile/calorie goals etc...
+    else:
+        return redirect("login")
+"""
+@app.route('/update/goals', methods = ['POST'])
+def update_goals():
+    user = User.query.filter_by(username=session['username']).first()
+    uid = user.uid
+    user_goals = UserGoals.query.filter_by(uid=uid).first()
+    print(user_goals)
+    user_goals.daily = request.form['goal']    
+    Db.session.commit()
+    return redirect(url_for('profile'))
+"""
 @app.route('/about')
 def extra_info():
-    return render_template("about.html") # adds additional information about the food and health concepts + about how the model works and apis + resources
-
+    if 'username' in session:
+        return render_template("about.html", logged_in = True) # adds additional information about the food and health concepts + about how the model works and apis + resources
+    else:
+        return render_template("about.html", logged_in=False)
 #ADAPTED FROM https://github.com/mitkir/keras-flask-image-classifier
 @app.route('/submit_image', methods=['GET', 'POST'])
 def upload_file():
@@ -139,55 +174,68 @@ def upload_file():
             
             probs, output = predict(file_path)
             print(output)
+            sorted(output, key=output.get)
             class_names = ['frozen_yogurt', 'hot_dog', 'pizza']
 
             print(
                 "This image most likely belongs to {}"
                 .format(class_names[np.argmax(probs)])
             )
-    #return render_template("home.html", label=output, imagesource=file_path)
         print(file_path)
         return render_template("submit.html", label = output, imagesource = file_path, prediction = class_names[np.argmax(probs)]) # area where you can submit the image for recognition 
     return render_template("submit.html")
-@app.route('/calories/<foodname>')
+@app.route('/calories/<foodname>', methods =['POST', 'GET'])
 def calories(foodname):
-    html_food_name = foodname.replace("_", " ")
-    foodname = foodname.replace("_", "%20")
-    print(html_food_name)
-    info = requests.get(f"https://api.edamam.com/api/food-database/v2/parser?app_id=c344f636&app_key=d2f4167ff9fc425ee9b8e5569d56e8f5&ingr={foodname}&nutrition-type=logging&category=generic-foods").json()
-    try:
-        calories = info["parsed"][0]["food"]["nutrients"]["ENERC_KCAL"]
-    except:
+    if request.method == 'GET':
+        html_food_name = foodname.replace("_", " ")
+        foodname = foodname.replace("_", "%20")
+        print(html_food_name)
+        info = requests.get(f"https://api.edamam.com/api/food-database/v2/parser?app_id=c344f636&app_key=d2f4167ff9fc425ee9b8e5569d56e8f5&ingr={foodname}&nutrition-type=logging&category=generic-foods").json()
         try:
-            calories = info["hints"][0]["food"]["nutrients"]["ENERC_KCAL"]
+            calories = info["parsed"][0]["food"]["nutrients"]["ENERC_KCAL"]
         except:
-            calories = "No Information Available"
-    try:
-        protein = info["parsed"][0]["food"]["nutrients"]["PROCNT"]
-    except:
+            try:
+                calories = info["hints"][0]["food"]["nutrients"]["ENERC_KCAL"]
+            except:
+                calories = "No Information Available"
         try:
-            protein = info["hints"][0]["food"]["nutrients"]["PROCNT"]
+            protein = info["parsed"][0]["food"]["nutrients"]["PROCNT"]
         except:
-            protein = "No Information Available"
-    try:
-        fat = info["parsed"][0]["food"]["nutrients"]["FAT"]
-    except:
+            try:
+                protein = info["hints"][0]["food"]["nutrients"]["PROCNT"]
+            except:
+                protein = "No Information Available"
         try:
-            fat = info["hints"][0]["food"]["nutrients"]["FAT"]
+            fat = info["parsed"][0]["food"]["nutrients"]["FAT"]
         except:
-            fat = "No Information Available"
+            try:
+                fat = info["hints"][0]["food"]["nutrients"]["FAT"]
+            except:
+                fat = "No Information Available"
 
-    try:
-        fibre = info["parsed"][0]["food"]["nutrients"]["FIBTG"]
-    except:
         try:
-            fibre = info["hints"][0]["food"]["nutrients"]["FIBTG"]
+            fibre = info["parsed"][0]["food"]["nutrients"]["FIBTG"]
         except:
-            fibre = "No Information Available"
-
-    print(f"calories: {calories}\nprotein: {protein}\nfat: {fat}\nfibre: {fibre}")
-    return render_template("calories.html", name=html_food_name, calories=calories, protein=protein, fat=fat, fibre=fibre) # shows the calories from the image (maybe not just calories)
+            try:
+                fibre = info["hints"][0]["food"]["nutrients"]["FIBTG"]
+            except:
+                fibre = "No Information Available"
     
+        print(f"calories: {calories}\nprotein: {protein}\nfat: {fat}\nfibre: {fibre}")
+        return render_template("calories.html", name=html_food_name, calories=calories, protein=protein, fat=fat, fibre=fibre) # shows the calories from the image (maybe not just calories)
+    else:
+        #add_calories(foodname)
+        global total_calories
+        total_calories += float(foodname)
+        return redirect(url_for('profile'))
+"""
+def add_calories(calories):
+    user = User.query.filter_by(username=session['username']).first()
+    uid = user.uid
+    user_goals = UserGoals.query.filter_by(uid=uid).first()
+    user_goals.daily += calories
+    Db.session.commit()
+"""
 
 @app.route('/daily_total')
 def daily_total():

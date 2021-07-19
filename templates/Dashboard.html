@@ -1,3 +1,4 @@
+{% set logged_in = True %}
 {% extends "layout.html" %}
 
 {% block scripts %}
@@ -8,21 +9,35 @@
     {% if session_username is defined %}
 
         <h1>Hi, {{ session_username }} !</h1>
+        <h1>Way to your goal: {{calories}}/{{daily_goal}}</h1>
 
     {% else %}
 
         <h1>Hi, guest!</h1>
 
     {% endif %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope = "col">Food Name</th>
+                <th scope = "col" colspan="4">Nutrition Stats</th>
+            </tr>
+        </thead>
+        <tbody>
 
+        </tbody>
+    </table>
     <div id="forms">
         {% if session_username is defined %}
 
+            <form action="/submit_image" method="GET">
+                <button type="submit"> Submit Image</button>
+            </form>    
             <form action="/logout" method="POST">
                 <button type="submit"> Log out</button>
             </form>
 
-            {% else %}
+        {% else %}
             <form action="/login" method="GET">
                 <button type="submit"> Log in</button>
             </form>

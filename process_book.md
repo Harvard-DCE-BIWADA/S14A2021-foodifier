@@ -47,7 +47,7 @@ Arda Eğrioğlu
 Alden Eberts
 
 1. Come up with the routes for the flask app  and then put them in to the app.py (they do not need to return a different html template yet) **COMPLETE**
-2. Create a first model using the images (looking through the tensorflow tutorials and probably a jupyter notebook) **IN PROCESS: CODE MADE BUT MODEL IS NOT PICKLED AND IS BAD**
+2. Create a first model using the images (looking through the tensorflow tutorials and probably a jupyter notebook) **COMPLETE**
 3. Implement your layout.html and index.html templates using any CSS styles you think are appropriate for your app. You may use bootstrap, or use templates you find on the web (html5up.net is a good resource). Any new templates should also extend layout.html and use the css styles you've chosen. **COMPLETE**
 
 ALL
@@ -55,15 +55,17 @@ ALL
 # Milestone 3 Tasks
 
 Arda Eğrioğlu
-1. Fix directories
-2. Link db to login register
-3. dahsboard db
+1. Fix directories **COMPLETE**
+2. Link db to login register **COMPLETE**
+3. dahsboard db **COMPLETE BUT NEEDS CHANGES + WORK**
 
 
 Alden Eberts
-1. Implement a somewhat working model
-2. Image upload and take picture 
-3. API stuff
+1. Implement a somewhat working model **COMEPLETE**
+2. Image upload and take picture **COMEPLETE**
+3. API stuff **COMEPLETE**
+4. Made the basic logic/path of the app **COMEPLETE**
+5. Added the start of being able to track calories **COMEPLETE BUT NOT LINKED TO DB BECAUSE OF THE STRUCTURE**
 
 
 # References & Citations

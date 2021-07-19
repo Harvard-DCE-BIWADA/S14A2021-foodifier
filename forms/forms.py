@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField, IntegerField
 from wtforms.validators import DataRequired
 
 
@@ -18,3 +18,7 @@ class LoginForm(FlaskForm):
 class NewpostForm(FlaskForm):
     content = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Post')
+
+class UpdateGoals(FlaskForm):
+    goal = IntegerField('Calorie Goal', validators = [DataRequired()]) 
+    submit = SubmitField('Update Goals')

@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 Db = SQLAlchemy()
 
 
-class HomeworkUser(Db.Model):
+class UserGoals(Db.Model):
     # Ref. to table
     __tablename__ = 'goals'
 
