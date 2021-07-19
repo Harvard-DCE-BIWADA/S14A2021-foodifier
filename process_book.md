@@ -58,6 +58,7 @@ Arda Eğrioğlu
 1. Fix directories **COMPLETE**
 2. Link db to login register **COMPLETE**
 3. dahsboard db **COMPLETE BUT NEEDS CHANGES + WORK**
+4. Make the slides for the presentation **COMPLETE**
 
 
 Alden Eberts
@@ -71,6 +72,8 @@ Alden Eberts
 # References & Citations
 
 DEMO MODEL - https://drive.google.com/drive/folders/1ZTFDsny9M3-YL79Dr6yLNrDviNXrGCut?usp=sharing
+
+DEMO SLIDES - https://docs.google.com/presentation/d/1Cpi0MnAzPUu-WqRUD9jnr6DfIVSeLF5ch7C5AFxx-jw/edit?usp=sharing
 
 Canva: Yellow with Teal Fork Food Festival Template
 
