@@ -25,7 +25,7 @@ import urllib.request
 # Load environment
 load_dotenv('.env')
 
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = 'static/uploads'
 
 # Initialize app
 app = Flask(__name__)
@@ -178,7 +178,7 @@ def upload_file():
                 file.save(file_path)    
         except:
             link = request.form['link']
-            file_path = os.path.join(app.root_path, "uploads", "img" + ".jpg")
+            file_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], "img" + ".jpg")
             urllib.request.urlretrieve(link, file_path)
         probs, output = predict(file_path)
         print(output)
@@ -190,7 +190,7 @@ def upload_file():
             .format(class_names[np.argmax(probs)])
         )
         print(file_path)
-        img_path = file_path.split('/')[1]
+        img_path = file_path.split('/')[2]
         print(img_path)
         return render_template("submit.html", label = output, imagesource = img_path, prediction = class_names[np.argmax(probs)]) # area where you can submit the image for recognition
 
