@@ -1,8 +1,7 @@
 import os
-
 from flask.helpers import total_seconds
 from dotenv import load_dotenv
-from os import environ, error
+from os import abort, environ, error
 from flask import Flask, flash, render_template, request, url_for, redirect, jsonify, session, send_from_directory, Response
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
@@ -20,6 +19,8 @@ import requests
 import cv2
 from urllib.parse import urlparse
 import urllib.request 
+import json
+import uuid
 
 
 
@@ -32,6 +33,7 @@ UPLOAD_FOLDER = 'static/uploads'
 app = Flask(__name__)
 app.secret_key = environ.get('SECRET_KEY')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 # Initialize DB
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL').replace('postgres://', 'postgresql://') # this is to solve a bug in heroku
@@ -169,40 +171,41 @@ def extra_info():
 
 
 def save_uploaded_image( file ):
-    if file and allowed_file( file ):
+    if file and allowed_file( file.filename ):
         file_name = secure_filename( file.filename )
         file_path = os.path.join( app.root_path, app.config[ 'UPLOAD_FOLDER' ], file_name )
         file.save( file_path )
-        print( file_path )
         return file_path
-    else
+    else:
         flash( "Couldn't save uploaded image!", 'danger' )
         return False
         
 def save_linked_image( link ):
+    #print(link)
     if link and link != '':
-        parsed_url = urlparse( link )
-        file_name = parsed_url.path.split( '/' )[-1] # last element of the path
+        file_name = str( uuid.uuid4() ) + '.png'
+        print( file_name )
         file_path = os.path.join( app.root_path, app.config[ 'UPLOAD_FOLDER' ], file_name )
         urllib.request.urlretrieve( link, file_path )
-        print( file_path )
         return file_path
-    else
+    else:
         flash( "Couldn't retrieve image!", 'danger' )
         return False
 
 #ADAPTED FROM https://github.com/mitkir/keras-flask-image-classifier
 @app.route('/submit_image', methods=['GET', 'POST'])
 def upload_file():
+    
     if request.method == 'POST':
-        if request.files[ 'file' ]:
-            file = save_uploaded_image( request.files[ 'file' ] )
-        else if( request.form[ 'link' ] ):
+
+        if 'upload' in request.files:
+            file = save_uploaded_image( request.files.get("upload") )
+        elif( request.form[ 'link' ] ):
             file = save_linked_image( request.form['link'] )
-        
+        #abort
         if not file:
             flash( "Couldn't process image!", 'warning' )
-            return return redirect( url_for( 'profile' ) )
+            return redirect( url_for( 'index' ) )
             
         print( "file to process: ", file, file.split( '/' )[ -1 ] )
         
