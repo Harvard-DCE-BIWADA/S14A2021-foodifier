@@ -5,18 +5,20 @@
 {% block content %}
 {% if not label %}
 <div class="booth">
+    <h2>Take A Photo</h2>
     <video id ="video" width="380" height="300" autoplay></video>
     <a href="#" id="capture" class = "booth-capture-button">Take Photo</a>
     <canvas id="canvas" width="400" height="300"></canvas>
     <img id = "photo" src="" alt="your image of the food">
     <form action="/submit_image" method=post enctype=multipart/form-data>
-        <input class = "hidden" id = 'linksub'type=text name=link>
+        <input class = "hidden" id = 'linksub' type=text name=link>
         <input type=submit value=Upload>
     </form>
+    <h2>Upload A Photo</h2>
     <form action="/submit_image" method=post enctype=multipart/form-data>
-    <input type=file name=file>
-    <input type=submit value=Upload>
-</form>
+        <input type=file name=file>
+        <input type=submit value=Upload>
+    </form>
 </div>
 
 {% endif %}
@@ -42,10 +44,34 @@
             {% endfor %}
         </tr>
         
-    </table> 
-    <button class = "btn btn-light"><a href="/calories/{{prediction}}">Get Calories</a></button>
+    </table>
+    <p>Was this prediction correct?</p>
+    <button class = "btn btn-light" onclick="toggleTextOff()">Yes</button>
+    <button class = "btn btn-light" onclick="toggleTextOn()">No</button>
+    <form class = "hidden_form" id = "text_box" method="POST" action="/corrected_food" style="display: none;">
+        <p>Input the name of the food</p>
+        <input type="text" name=food>
+        <input type=submit value="Get Calories">
+    </form>
+    </br>
+    <button class = "btn btn-light" id = 'get_calories' style="display: none;"><a href="/calories/{{prediction}}">Get Calories</a></button>
 </div>
+
 
 {% endif %}
 <script src="../static/js/video.js"></script>
+<script>
+    function toggleTextOn() {
+        var text = document.getElementById("text_box");
+        text.style.display = "block";
+        var button = document.getElementById('get_calories')
+        button.style.display = "none"
+    }
+    function toggleTextOff() {
+        var text = document.getElementById("text_box");
+        text.style.display = "none";
+        var button = document.getElementById('get_calories')
+        button.style.display = "block"
+    }
+</script>
 {% endblock %}

@@ -282,3 +282,8 @@ def predict(file):
     output = {'Frozen Yogurt' : probs[0], "Hot Dog" : probs[1], "Pizza" : probs[2]}
     #score = tf.nn.softmax(probs[0])
     return probs, output
+
+@app.route('/corrected_food', methods = ['POST'])
+def corrected_food():
+    food = request.form['food']
+    return redirect(f'/calories/{food}')

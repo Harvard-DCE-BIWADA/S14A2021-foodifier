@@ -77,6 +77,7 @@ Arda Eğrioğlu
 Alden Eberts
 1. Make the option to take a picture **COMEPLETE**
 2. Improve the Dashboard UI **Started but could not comeplete because I did not have the database and food storing was not working with the database**
+3. Add a text input for the food if the prediction was wrong **COMEPLETE**
 
 
 # References & Citations
