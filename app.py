@@ -3,7 +3,7 @@ import os
 from flask.helpers import total_seconds
 from dotenv import load_dotenv
 from os import environ, error
-from flask import Flask, flash, render_template, request, url_for, redirect, jsonify, session, send_from_directory
+from flask import Flask, flash, render_template, request, url_for, redirect, jsonify, session, send_from_directory, Response
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from models.models import Db, User, UserGoals
@@ -17,6 +17,10 @@ from keras.models import Sequential, load_model
 from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 import tensorflow as tf
 import requests
+import cv2
+import urllib.request 
+
+
 
 # Load environment
 load_dotenv('.env')
@@ -165,24 +169,32 @@ def extra_info():
 @app.route('/submit_image', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        file = request.files['file']
-        
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)
+        try:
+            file = request.files['file']
             
-            probs, output = predict(file_path)
-            print(output)
-            sorted(output, key=output.get)
-            class_names = ['frozen_yogurt', 'hot_dog', 'pizza']
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(file_path)    
+        except:
+            link = request.form['link']
+            file_path = os.path.join(app.root_path, "uploads", "img" + ".jpg")
+            urllib.request.urlretrieve(link, file_path)
+        probs, output = predict(file_path)
+        print(output)
+        sorted(output, key=output.get)
+        class_names = ['frozen_yogurt', 'hot_dog', 'pizza']
 
-            print(
-                "This image most likely belongs to {}"
-                .format(class_names[np.argmax(probs)])
-            )
+        print(
+            "This image most likely belongs to {}"
+            .format(class_names[np.argmax(probs)])
+        )
         print(file_path)
-        return render_template("submit.html", label = output, imagesource = file_path, prediction = class_names[np.argmax(probs)]) # area where you can submit the image for recognition 
+        img_path = file_path.split('/')[1]
+        print(img_path)
+        return render_template("submit.html", label = output, imagesource = img_path, prediction = class_names[np.argmax(probs)]) # area where you can submit the image for recognition
+
+
     return render_template("submit.html")
 @app.route('/calories/<foodname>', methods =['POST', 'GET'])
 def calories(foodname):
@@ -255,7 +267,7 @@ def history():
 allowed_extensions = set(["jpg", "jpeg", "png"])
 image_size = (600, 600)
 
-model = load_model('/Users/n.egrioglu1/Desktop/food-101-demo-model')  
+model = load_model('/mnt/c/Users/simon/Desktop/food-101-demo-model')  
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -271,3 +283,21 @@ def predict(file):
     #score = tf.nn.softmax(probs[0])
     return probs, output
 
+
+#SOMEWHAT BASED OFF OF https://www.youtube.com/watch?v=pLaNnJZ-PNk
+camera_port = 0
+camera = cv2.VideoCapture()
+
+
+def gen_frames(camera):  
+    
+    while True:
+        frame = camera.read()  # read the camera frame
+        ret, buffer = cv2.imencode('.jpg', frame)
+        frame = buffer.tobytes()
+        yield (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(gen_frames(camera), mimetype='multipart/x-mixed-replace; boundary=frame')

@@ -43,3 +43,25 @@ html {
   code {
     font-size: 80%;
   }
+
+  .booth {
+    width:400px;
+    background:#ccc;
+    border:10px solid #ddd;
+    margin:auto;
+  }
+  .booth-capture-button{
+    display:block;
+    margin: 10px 0;
+    padding:10px 20px;
+    background-color: cornflowerblue;
+    color:#fff;
+    text-align: center;
+    text-decoration: none;
+  }
+  #canvas{
+    display: none;
+  }
+  .hidden{
+    display:none;
+  }

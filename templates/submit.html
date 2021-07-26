@@ -4,16 +4,27 @@
 {% endblock %}
 {% block content %}
 {% if not label %}
-<form action="/submit_image" method=post enctype=multipart/form-data>
+<div class="booth">
+    <video id ="video" width="380" height="300" autoplay></video>
+    <a href="#" id="capture" class = "booth-capture-button">Take Photo</a>
+    <canvas id="canvas" width="400" height="300"></canvas>
+    <img id = "photo" src="" alt="your image of the food">
+    <form action="/submit_image" method=post enctype=multipart/form-data>
+        <input class = "hidden" id = 'linksub'type=text name=link>
+        <input type=submit value=Upload>
+    </form>
+    <form action="/submit_image" method=post enctype=multipart/form-data>
     <input type=file name=file>
     <input type=submit value=Upload>
 </form>
+</div>
+
 {% endif %}
 {# ADAPTED FROM https://github.com/mitkir/keras-flask-image-classifier #}
 {% if label %}
 <div class="col-lg-4">
     <div class="page-header">
-        <h3 id="tables">Result</h3>
+        <h3 id="tables">Result: {{prediction}}</h3>
     </div>
     <table class="table table-hover">
         <thead>
@@ -23,7 +34,7 @@
             </tr>
         </thead>
         <tr>
-            <th scope="row" rowspan = "4"> <img width="600" height="600" src="../{{imagesource}}" /> </th>
+            <th scope="row" rowspan = "4"> <img width="600" height="600" src="uploads/{{imagesource}}" /> </th>
             {% for key, val in label.items() %}
                 <tr>
                     <td> {{key}}: {{val}} </td>
@@ -34,5 +45,7 @@
     </table> 
     <button class = "btn btn-light"><a href="/calories/{{prediction}}">Get Calories</a></button>
 </div>
+
 {% endif %}
+<script src="../static/js/video.js"></script>
 {% endblock %}

@@ -68,6 +68,16 @@ Alden Eberts
 4. Made the basic logic/path of the app **COMEPLETE**
 5. Added the start of being able to track calories **COMEPLETE BUT NOT LINKED TO DB BECAUSE OF THE STRUCTURE**
 
+# Milestone 4 Tasks
+
+Arda Eğrioğlu
+1. Fix previous errors with the database
+2. Get food storing working with the database
+
+Alden Eberts
+1. Make the option to take a picture **COMEPLETE**
+2. Improve the Dashboard UI
+
 
 # References & Citations
 
