@@ -18,6 +18,7 @@ from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 import tensorflow as tf
 import requests
 import cv2
+from urllib.parse import urlparse
 import urllib.request 
 
 
@@ -165,34 +166,57 @@ def extra_info():
         return render_template("about.html", logged_in = True) # adds additional information about the food and health concepts + about how the model works and apis + resources
     else:
         return render_template("about.html", logged_in=False)
+
+
+def save_uploaded_image( file ):
+    if file and allowed_file( file ):
+        file_name = secure_filename( file.filename )
+        file_path = os.path.join( app.root_path, app.config[ 'UPLOAD_FOLDER' ], file_name )
+        file.save( file_path )
+        print( file_path )
+        return file_path
+    else
+        flash( "Couldn't save uploaded image!", 'danger' )
+        return False
+        
+def save_linked_image( link ):
+    if link and link != '':
+        parsed_url = urlparse( link )
+        file_name = parsed_url.path.split( '/' )[-1] # last element of the path
+        file_path = os.path.join( app.root_path, app.config[ 'UPLOAD_FOLDER' ], file_name )
+        urllib.request.urlretrieve( link, file_path )
+        print( file_path )
+        return file_path
+    else
+        flash( "Couldn't retrieve image!", 'danger' )
+        return False
+
 #ADAPTED FROM https://github.com/mitkir/keras-flask-image-classifier
 @app.route('/submit_image', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        try:
-            file = request.files['file']
+        if request.files[ 'file' ]:
+            file = save_uploaded_image( request.files[ 'file' ] )
+        else if( request.form[ 'link' ] ):
+            file = save_linked_image( request.form['link'] )
+        
+        if not file:
+            flash( "Couldn't process image!", 'warning' )
+            return return redirect( url_for( 'profile' ) )
             
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                file.save(file_path)    
-        except:
-            link = request.form['link']
-            file_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], "img" + ".jpg")
-            urllib.request.urlretrieve(link, file_path)
-        probs, output = predict(file_path)
-        print(output)
-        sorted(output, key=output.get)
-        class_names = ['frozen_yogurt', 'hot_dog', 'pizza']
+        print( "file to process: ", file, file.split( '/' )[ -1 ] )
+        
+        probs, output = predict( file )
+        print( output )
+        sorted( output, key = output.get )
+        class_names = [ 'frozen_yogurt', 'hot_dog', 'pizza' ]
 
         print(
             "This image most likely belongs to {}"
             .format(class_names[np.argmax(probs)])
         )
-        print(file_path)
-        img_path = file_path.split('/')[2]
-        print(img_path)
-        return render_template("submit.html", label = output, imagesource = img_path, prediction = class_names[np.argmax(probs)]) # area where you can submit the image for recognition
+        
+        return render_template("submit.html", label = output, imagesource = file.split( '/' )[ -1 ], prediction = class_names[np.argmax(probs)]) # area where you can submit the image for recognition
 
 
     return render_template("submit.html")
