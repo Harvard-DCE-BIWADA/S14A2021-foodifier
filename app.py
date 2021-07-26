@@ -282,22 +282,3 @@ def predict(file):
     output = {'Frozen Yogurt' : probs[0], "Hot Dog" : probs[1], "Pizza" : probs[2]}
     #score = tf.nn.softmax(probs[0])
     return probs, output
-
-
-#SOMEWHAT BASED OFF OF https://www.youtube.com/watch?v=pLaNnJZ-PNk
-camera_port = 0
-camera = cv2.VideoCapture()
-
-
-def gen_frames(camera):  
-    
-    while True:
-        frame = camera.read()  # read the camera frame
-        ret, buffer = cv2.imencode('.jpg', frame)
-        frame = buffer.tobytes()
-        yield (b'--frame\r\n'
-                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
-
-@app.route('/video_feed')
-def video_feed():
-    return Response(gen_frames(camera), mimetype='multipart/x-mixed-replace; boundary=frame')
