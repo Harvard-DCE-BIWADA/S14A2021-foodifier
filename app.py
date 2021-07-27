@@ -38,6 +38,7 @@ app = Flask(__name__)
 app.secret_key = environ.get('SECRET_KEY')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.run(debug=True, use_reloader=False)
 
 
 # Initialize DB
@@ -233,9 +234,11 @@ def upload_file():
 @app.route('/calories/<foodname>', methods =['POST', 'GET'])
 def calories(foodname):
     if request.method == 'GET':
+        
         html_food_name = foodname.replace("_", " ")
         foodname = foodname.replace("_", "%20")
         print(html_food_name)
+        
         info = requests.get(f"https://api.edamam.com/api/food-database/v2/parser?app_id=c344f636&app_key=d2f4167ff9fc425ee9b8e5569d56e8f5&ingr={foodname}&nutrition-type=logging&category=generic-foods").json()
         try:
             calories = info["parsed"][0]["food"]["nutrients"]["ENERC_KCAL"]
@@ -279,13 +282,13 @@ def calories(foodname):
         print (str(total_calories))
         user.daily = int(total_calories)
         user.weekly = int(total_calories)
-
+       
         uid = user.uid
         calorie = int(total_calories)
-        food = foods(uid = uid, foodname = foodname, calorie = calorie)
+        food = foods(uid = uid, foodname = 'test', calorie = total_calories)
         
         Db.session.add(food)
-        Db.session.commit
+        Db.session.commit()
         return redirect(url_for('profile'))
 """
 def add_calories(calories):
