@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 Db = SQLAlchemy()
 
 
-class HomeworkUser(Db.Model):
+class users(Db.Model):
     # Ref. to table
     __tablename__ = 'users'
 
@@ -12,6 +12,10 @@ class HomeworkUser(Db.Model):
     uid = Db.Column(Db.Integer, primary_key=True, autoincrement=True)
     username = Db.Column(Db.String(64), nullable=False)
     password = Db.Column(Db.String(64), nullable=False)
+    weeklyg = Db.Column(Db.Integer)
+    weekly = Db.Column(Db.Integer)
+    dailyg = Db.Column(Db.Integer)
+    daily = Db.Column(Db.Integer)
     
 
     # toString

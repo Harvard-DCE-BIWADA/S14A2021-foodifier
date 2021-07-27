@@ -1,11 +1,12 @@
 import os
 from flask.helpers import total_seconds
+from sqlalchemy.sql.expression import update
 from dotenv import load_dotenv
 from os import abort, environ, error
 from flask import Flask, flash, render_template, request, url_for, redirect, jsonify, session, send_from_directory, Response
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
-from models.models import Db, User, UserGoals
+from sqlalchemy import func, bindparam
+from models.models import Db, users, foods
 #from models.goals import UserGoals
 from forms.forms import SignupForm, LoginForm, UpdateGoals
 from passlib.hash import sha256_crypt
@@ -16,7 +17,7 @@ from keras.models import Sequential, load_model
 from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 import tensorflow as tf
 import requests
-import cv2
+#import cv2
 from urllib.parse import urlparse
 import urllib.request 
 import json
@@ -24,8 +25,11 @@ import uuid
 
 
 
+
+
 # Load environment
 load_dotenv('.env')
+
 
 UPLOAD_FOLDER = 'static/uploads'
 
@@ -35,11 +39,14 @@ app.secret_key = environ.get('SECRET_KEY')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
+
 # Initialize DB
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL').replace('postgres://', 'postgresql://') # this is to solve a bug in heroku
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 print(environ.get('DATABASE_URL'))
 Db.init_app(app)
+
+
 
 global total_calories
 total_calories = 0
@@ -61,7 +68,7 @@ def user_create():
     password = request.form['password']
 
     # Init user from Db query
-    existing_user = User.query.filter_by(username=username).first()
+    existing_user = users.query.filter_by(username=username).first()
 
     # Control new credentials
     if username == '' or existing_user:
@@ -69,7 +76,7 @@ def user_create():
         print("error")
         return redirect(url_for('signup'))
     else:
-        user = User(username=username, password=sha256_crypt.hash(password))        
+        user = users(username=username, password=sha256_crypt.hash(password),weeklyg = 0, weekly = 0, dailyg = 1000, daily = 0)        
         Db.session.add(user)
         Db.session.commit()
         #user = User.query.filter_by(username=username).first()
@@ -100,7 +107,7 @@ def login():
         password = request.form['password']
 
         # Init user by Db query
-        user = User.query.filter_by(username=username).first()
+        user = users.query.filter_by(username=username).first()
         print(user)
 
         # Control login validity
@@ -143,11 +150,11 @@ def edit_goals():
 def profile():
     if 'username' in session: 
         if session['username'] != '':
-            user = User.query.filter_by(username=session['username']).first()
+            user = users.query.filter_by(username=session['username']).first()
             uid = user.uid
             print(uid)
             global total_calories
-            user_goals = UserGoals.query.filter_by(uid=uid).first()
+            user_goals = users.query.filter_by(uid=uid).first()
             return render_template('Dashboard.html', session_username = session['username'],calories=total_calories, daily_goal = str(2000)) # where the user can set up their profile/calorie goals etc...
     else:
         return redirect("login")
@@ -203,9 +210,9 @@ def upload_file():
         elif( request.form[ 'link' ] ):
             file = save_linked_image( request.form['link'] )
         #abort
-        if not file:
-            flash( "Couldn't process image!", 'warning' )
-            return redirect( url_for( 'index' ) )
+        # if not file:
+        #     flash( "Couldn't process image!", 'warning' )
+        #     return redirect( url_for( 'index' ) )
             
         print( "file to process: ", file, file.split( '/' )[ -1 ] )
         
@@ -261,11 +268,24 @@ def calories(foodname):
                 fibre = "No Information Available"
     
         print(f"calories: {calories}\nprotein: {protein}\nfat: {fat}\nfibre: {fibre}")
-        return render_template("calories.html", name=html_food_name, calories=calories, protein=protein, fat=fat, fibre=fibre) # shows the calories from the image (maybe not just calories)
+        return render_template("calories.html", name=html_food_name, calories=calories, protein=protein, fat=fat, fibre=fibre)
+        # shows the calories from the image (maybe not just calories)
     else:
+        username = session['username']
+        user = users.query.filter_by(username=username).first()
         #add_calories(foodname)
         global total_calories
         total_calories += float(foodname)
+        print (str(total_calories))
+        user.daily = int(total_calories)
+        user.weekly = int(total_calories)
+
+        uid = user.uid
+        calorie = int(total_calories)
+        food = foods(uid = uid, foodname = foodname, calorie = calorie)
+        
+        Db.session.add(food)
+        Db.session.commit
         return redirect(url_for('profile'))
 """
 def add_calories(calories):
@@ -294,7 +314,7 @@ def history():
 allowed_extensions = set(["jpg", "jpeg", "png"])
 image_size = (600, 600)
 
-model = load_model('/mnt/c/Users/simon/Desktop/food-101-demo-model')  
+model = load_model(environ.get('MODEL_PATH'))
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -314,3 +334,4 @@ def predict(file):
 def corrected_food():
     food = request.form['food']
     return redirect(f'/calories/{food}')
+
