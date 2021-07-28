@@ -153,10 +153,12 @@ def profile():
         if session['username'] != '':
             user = users.query.filter_by(username=session['username']).first()
             uid = user.uid
+            dailyg = user.dailyg
+            calories = user.daily
             print(uid)
             global total_calories
             user_goals = users.query.filter_by(uid=uid).first()
-            return render_template('Dashboard.html', session_username = session['username'],calories=total_calories, daily_goal = str(2000)) # where the user can set up their profile/calorie goals etc...
+            return render_template('Dashboard.html', session_username = session['username'],calories=calories, daily_goal = dailyg) # where the user can set up their profile/calorie goals etc...
     else:
         return redirect("login")
 """
@@ -273,6 +275,7 @@ def calories(foodname):
         print(f"calories: {calories}\nprotein: {protein}\nfat: {fat}\nfibre: {fibre}")
         return render_template("calories.html", name=html_food_name, calories=calories, protein=protein, fat=fat, fibre=fibre)
         # shows the calories from the image (maybe not just calories)
+    """
     else:
         username = session['username']
         user = users.query.filter_by(username=username).first()
@@ -290,14 +293,23 @@ def calories(foodname):
         Db.session.add(food)
         Db.session.commit()
         return redirect(url_for('profile'))
-"""
-def add_calories(calories):
-    user = User.query.filter_by(username=session['username']).first()
-    uid = user.uid
-    user_goals = UserGoals.query.filter_by(uid=uid).first()
-    user_goals.daily += calories
+    """
+
+@app.route('/add_food', methods = ['POST'])
+def add_food():
+    user = users.query.filter_by(username=session['username']).first()
+    food_name = request.form['foodname']
+    calories = float(request.form['calories'])
+    print(type(user.daily), type(user.weekly))
+
+    user.daily += int(calories)
+    user.weekly += int(calories)
     Db.session.commit()
-"""
+
+    food = foods(uid = user.uid, foodname = food_name, calorie = calories)
+    Db.session.add(food)
+    Db.session.commit()
+    return redirect(url_for('profile'))
 
 @app.route('/daily_total')
 def daily_total():

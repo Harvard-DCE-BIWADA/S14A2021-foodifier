@@ -27,8 +27,8 @@ class foods(Db.Model):
 
     fid = Db.Column(Db.Integer, primary_key=True, autoincrement=True)
     uid = Db.Column(Db.Integer)
-    foodname = Db.column(Db.String(64))
-    calorie = Db.column(Db.Integer)
+    foodname = Db.Column(Db.String(64))
+    calorie = Db.Column(Db.Integer)
 
 
 

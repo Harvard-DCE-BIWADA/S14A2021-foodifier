@@ -32,8 +32,10 @@
     </tr>
     
 </table> 
-<form method="post" action='/calories/{{calories}}'>
+<form method="post" action='/add_food'>
     <button class = "btn btn-light">Add Food</button>
+    <input type = "hidden" id = 'foodname' name="foodname" value = "{{name}}">
+    <input type = "hidden" id = 'calories' name="calories" value = "{{calories}}">
 </form>
 
 {% endblock %}
