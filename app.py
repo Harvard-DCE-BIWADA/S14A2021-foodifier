@@ -1,4 +1,6 @@
 import os
+import sys
+import logging
 from flask.helpers import total_seconds
 from sqlalchemy.sql.expression import update
 from dotenv import load_dotenv
@@ -38,7 +40,7 @@ app = Flask(__name__)
 app.secret_key = environ.get('SECRET_KEY')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-app.run(debug=True, use_reloader=False)
+#app.run(debug=True, use_reloader=False)
 
 
 # Initialize DB
@@ -149,6 +151,7 @@ def edit_goals():
 """
 @app.route('/profile')
 def profile():
+    app.logger.info("hello world")
     if 'username' in session: 
         if session['username'] != '':
             user = users.query.filter_by(username=session['username']).first()
@@ -205,7 +208,8 @@ def save_linked_image( link ):
 #ADAPTED FROM https://github.com/mitkir/keras-flask-image-classifier
 @app.route('/submit_image', methods=['GET', 'POST'])
 def upload_file():
-    
+    print("upload image", flush=True, file=sys.stdout
+)
     if request.method == 'POST':
 
         if 'upload' in request.files:
@@ -336,11 +340,13 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in allowed_extensions
 
 def predict(file):
+    print("running predict")
     img = load_img(file, target_size = image_size)
     img = img_to_array(img)
     img = np.expand_dims(img, axis=0)
     probs = model.predict(img)[0]
     print(probs)
+    print( model.predict_classes, flush=True)
     output = {'Frozen Yogurt' : probs[0], "Hot Dog" : probs[1], "Pizza" : probs[2]}
     #score = tf.nn.softmax(probs[0])
     return probs, output
