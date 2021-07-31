@@ -17,7 +17,7 @@ CSCI S14A - Building Interactive Web Applications for Data Analysis
 ### Team Members
 
 Arda Eğrioğlu
-Alden Ebert
+Alden Eberts
 
 # Milestone 1 Tasks
 
@@ -106,4 +106,6 @@ https://github.com/faizan170/tensorflow-image-classification-flask-deployment
 
 https://bhashkarkunal.medium.com/image-classification-api-creation-using-tensorflow-flask-mongodb-61a53835e62d
 
+https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/vision/ipynb/image_classification_efficientnet_fine_tuning.ipynb#scrollTo=5pPrervcOfEY
 
+https://keras.io/examples/vision/image_classification_efficientnet_fine_tuning/
