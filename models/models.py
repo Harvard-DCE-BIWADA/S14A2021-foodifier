@@ -15,6 +15,7 @@ class users(Db.Model):
     weekly = Db.Column(Db.Integer)
     dailyg = Db.Column(Db.Integer)
     daily = Db.Column(Db.Integer)
+    firstlogin = Db.Column(Db.Integer, nullable=True)
     
 
     # toString

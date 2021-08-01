@@ -2,7 +2,9 @@ import os
 import sys
 import logging
 from flask.helpers import total_seconds
+from sqlalchemy.sql.elements import Null
 from sqlalchemy.sql.expression import update
+from sqlalchemy.sql.functions import session_user
 from dotenv import load_dotenv
 from os import abort, environ, error
 from flask import Flask, flash, render_template, request, url_for, redirect, jsonify, session, send_from_directory, Response
@@ -24,6 +26,9 @@ from urllib.parse import urlparse
 import urllib.request 
 import json
 import uuid
+import time
+from datetime import datetime, date
+import threading
 
 
 
@@ -48,9 +53,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL').replace('pos
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 print(environ.get('DATABASE_URL'))
 Db.init_app(app)
+timer = 0
 
 
-
+    
 global total_calories
 total_calories = 0
 @app.route('/')
@@ -72,14 +78,14 @@ def user_create():
 
     # Init user from Db query
     existing_user = users.query.filter_by(username=username).first()
-
+    today = datetime.isoweekday(date.today())
     # Control new credentials
     if username == '' or existing_user:
         flash('The username already exists. Please pick another one.')
         print("error")
         return redirect(url_for('signup'))
     else:
-        user = users(username=username, password=sha256_crypt.hash(password),weeklyg = 0, weekly = 0, dailyg = 1000, daily = 0)        
+        user = users(username=username, password=sha256_crypt.hash(password),weeklyg = 0, weekly = 0, dailyg = 1000, daily = 0, firstlogin = today)        
         Db.session.add(user)
         Db.session.commit()
         #user = User.query.filter_by(username=username).first()
@@ -98,13 +104,16 @@ def user_create():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-
+    
+    
+    print(datetime.isoweekday(date.today()))
+    today = datetime.isoweekday(date.today())
     # Init form
     form = LoginForm()
 
     # If post
     if request.method == 'POST':
-
+        
         # Init credentials from form request
         username = request.form['username']
         password = request.form['password']
@@ -119,7 +128,15 @@ def login():
             return redirect(url_for('login'))
         else:
             session['username'] = username
-            return redirect(url_for('profile'))
+            print(username)
+            user = users.query.filter_by(username=username).first()
+            if user.firstlogin == Null:
+                print('Is Null')
+                first_login = users(firstlogin = today)
+                Db.session.add(first_login)
+                Db.session.commit()
+            else:
+                return redirect(url_for('profile'))
 
     # If GET
     else:
@@ -151,6 +168,7 @@ def edit_goals():
 """
 @app.route('/profile')
 def profile():
+    today = datetime.isoweekday(date.today())
     app.logger.info("hello world")
     if 'username' in session: 
         if session['username'] != '':
@@ -161,7 +179,15 @@ def profile():
             print(uid)
             global total_calories
             user_goals = users.query.filter_by(uid=uid).first()
-            return render_template('Dashboard.html', session_username = session['username'],calories=calories, daily_goal = dailyg) # where the user can set up their profile/calorie goals etc...
+            if user.firstlogin != today:
+                print('working')
+                user.daily = 0
+                
+                user.firstlogin = today
+                Db.session.commit()
+                return render_template('Dashboard.html', session_username = session['username'],calories=calories, daily_goal = dailyg)
+            else:
+                return render_template('Dashboard.html', session_username = session['username'],calories=calories, daily_goal = dailyg) # where the user can set up their profile/calorie goals etc...
     else:
         return redirect("login")
 """
