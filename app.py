@@ -261,13 +261,12 @@ def upload_file():
         print( output )
         sorted( output, key = output.get )
         global class_names
-
         print(
             "This image most likely belongs to {}"
             .format(class_names[np.argmax(probs)])
         )
         
-        return render_template("submit.html", label = output, imagesource = file.split( '/' )[ -1 ], prediction = class_names[np.argmax(probs)]) # area where you can submit the image for recognition
+        return render_template("submit.html", label = output, imagesource = file.split( '/' )[ -1 ], prediction = list(output.keys())[0]) # area where you can submit the image for recognition
 
 
     return render_template("submit.html")
