@@ -1,6 +1,5 @@
 import os
 import sys
-import logging
 from flask.helpers import total_seconds
 from sqlalchemy.sql.elements import Null
 from sqlalchemy.sql.expression import label, update
@@ -19,8 +18,8 @@ import numpy as np
 from werkzeug.utils import secure_filename
 from keras.models import Sequential, load_model
 from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
+import tensorflow as tf
 import requests
-#import cv2
 from urllib.parse import urlparse
 import urllib.request 
 import uuid
