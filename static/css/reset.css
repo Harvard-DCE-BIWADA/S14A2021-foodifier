@@ -66,3 +66,11 @@ html {
   .hidden{
     display:none;
   }
+
+ .hidden_form{
+   display: none;
+ }
+
+ #centerarea{
+   margin-left: 20%;
+ }

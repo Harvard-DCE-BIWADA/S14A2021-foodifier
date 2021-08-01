@@ -11,36 +11,38 @@
 {% endblock %}
 
 {% block content %}
+    <div class = "outline">
 
-    <h1>Login form</h1>
+        <h1>Login form</h1>
 
-    <form method="POST" action="/login" novalidate>
-        {{ form.hidden_tag() }}
+        <form method="POST" action="/login" novalidate>
+            {{ form.hidden_tag() }}
 
-        <div class="form-group">
+            <div class="form-group">
 
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
-            {% for error in form.username.errors %}
-                <span class="form-error-message">[{{ error }}]</span>
+                {{ form.username.label }}<br>
+                {{ form.username(size=32) }}<br>
+                {% for error in form.username.errors %}
+                    <span class="form-error-message">[{{ error }}]</span>
 
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
 
-        <div class="form-group">
+            <div class="form-group">
 
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
-            {% for error in form.password.errors %}
-                <span class="form-error-message">[{{ error }}]</span>
+                {{ form.password.label }}<br>
+                {{ form.password(size=32) }}<br>
+                {% for error in form.password.errors %}
+                    <span class="form-error-message">[{{ error }}]</span>
 
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
 
-        {{ form.submit(class="form-submit") }}
+            {{ form.submit(class="form-submit") }}
 
-    </form>
+        </form>
 
-    <p>New User? <a href="{{ url_for('signup') }}">Click to Register!</a></p>
+        <p>New User? <a href="{{ url_for('signup') }}">Click to Register!</a></p>
+    </div>
 
 {% endblock %}

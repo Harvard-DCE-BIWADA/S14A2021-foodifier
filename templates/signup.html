@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block content %}
-
+<div class = "outline">
     <h1>Signup form</h1>
 
     <form method="POST" action="/user/create" novalidate>
@@ -38,5 +38,5 @@
     </form>
 
     <p>Already signed up? <a href="{{ url_for('login') }}">Log in!</a></p>
-
+</div>
 {% endblock %}

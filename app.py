@@ -3,7 +3,7 @@ import sys
 import logging
 from flask.helpers import total_seconds
 from sqlalchemy.sql.elements import Null
-from sqlalchemy.sql.expression import update
+from sqlalchemy.sql.expression import label, update
 from sqlalchemy.sql.functions import session_user
 from dotenv import load_dotenv
 from os import abort, environ, error
@@ -59,6 +59,15 @@ timer = 0
     
 global total_calories
 total_calories = 0
+
+global class_names
+class_names = []
+with open('/mnt/c/Users/simon/desktop/meta/classes.txt') as f:
+    for line in f:
+        class_names.append(line[:-1]) #gets rid of \n
+
+
+
 @app.route('/')
 def index():
     print(session)
@@ -248,11 +257,10 @@ def upload_file():
         #     return redirect( url_for( 'index' ) )
             
         print( "file to process: ", file, file.split( '/' )[ -1 ] )
-        
         probs, output = predict( file )
         print( output )
         sorted( output, key = output.get )
-        class_names = [ 'frozen_yogurt', 'hot_dog', 'pizza' ]
+        global class_names
 
         print(
             "This image most likely belongs to {}"
@@ -357,7 +365,7 @@ def history():
 #ADAPTED FROM - https://github.com/mitkir/keras-flask-image-classifier/blob/master/application.py 
 
 allowed_extensions = set(["jpg", "jpeg", "png"])
-image_size = (600, 600)
+image_size = (224, 224)
 
 model = load_model(environ.get('MODEL_PATH'))
 
@@ -371,11 +379,23 @@ def predict(file):
     img = img_to_array(img)
     img = np.expand_dims(img, axis=0)
     probs = model.predict(img)[0]
-    print(probs)
-    print( model.predict_classes, flush=True)
-    output = {'Frozen Yogurt' : probs[0], "Hot Dog" : probs[1], "Pizza" : probs[2]}
+    #print(probs)
+    #print( model.predict_classes, flush=True)
+    labels = {}
+    with open('/mnt/c/Users/simon/desktop/meta/labels.txt') as f:
+        for line in f:
+            labels[line[:-1]] = 0 #gets rid of \n
+    i = 0
+    for key in labels:
+        labels[key] = probs[i] #f"{round(probs[i]*100, 2)}%"
+        i+= 1
+    labels = dict(sorted(labels.items(), key=lambda k: k[1], reverse=True))
+    for key, val in labels.items():
+        labels[key] = f"{round(val*100, 2)}%"
+    print(labels)
+    labels = {k: labels[k] for k in list(labels)[:5]}
     #score = tf.nn.softmax(probs[0])
-    return probs, output
+    return probs, labels
 
 @app.route('/corrected_food', methods = ['POST'])
 def corrected_food():
