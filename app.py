@@ -159,7 +159,7 @@ def signup():
     # Init form
     form = SignupForm()
 
-    return render_template( 'signup.html', title='Signup', form=form )
+    return render_template( 'signup.html', title='Signup', form=form)
 """
 @app.route('/edit_goals')
 def edit_goals():
