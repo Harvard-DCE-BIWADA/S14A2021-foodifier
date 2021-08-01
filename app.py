@@ -62,7 +62,8 @@ total_calories = 0
 
 global class_names
 class_names = []
-with open('/mnt/c/Users/simon/desktop/meta/classes.txt') as f:
+path = os.path.join(app.root_path, "meta", "classes.txt")
+with open(path) as f:
     for line in f:
         class_names.append(line[:-1]) #gets rid of \n
 
@@ -365,8 +366,8 @@ def history():
 
 allowed_extensions = set(["jpg", "jpeg", "png"])
 image_size = (224, 224)
-
-model = load_model(environ.get('MODEL_PATH'))
+path = os.path.join(app.root_path, "first_model")
+model = load_model(path)
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -381,7 +382,8 @@ def predict(file):
     #print(probs)
     #print( model.predict_classes, flush=True)
     labels = {}
-    with open('/mnt/c/Users/simon/desktop/meta/labels.txt') as f:
+    path = os.path.join(app.root_path, "meta", "labels.txt")
+    with open(path) as f:
         for line in f:
             labels[line[:-1]] = 0 #gets rid of \n
     i = 0
