@@ -19,16 +19,12 @@ import numpy as np
 from werkzeug.utils import secure_filename
 from keras.models import Sequential, load_model
 from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
-import tensorflow as tf
 import requests
 #import cv2
 from urllib.parse import urlparse
 import urllib.request 
-import json
 import uuid
-import time
 from datetime import datetime, date
-import threading
 
 
 
