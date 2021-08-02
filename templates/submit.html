@@ -45,7 +45,7 @@
             
             <form style="padding-left: 20px; padding-bottom: 20px;" class = "hidden_form" id = "text_box" method="POST" action="/corrected_food" style="display: none;">
                 <p>Input the name of the food</p>
-                <input type="text" name=food>
+                <input type="text" name=food required>
                 <input type=submit value="Get Calories">
                 <br />
                 <button class = "btn btn-light" id = 'get_calories' style="display: none;"><a href="/calories/{{prediction}}">Get Calories</a></button>
