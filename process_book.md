@@ -95,6 +95,7 @@ Alden Eberts
 4. Implement the rest of the CRUD methods + forms for them **COMEPLETE**
 5. Implement more bootstrap and css **COMEPLETE**
 6. Fixed bug with api and wrong foodnames **COMEPLETE**
+7. Fixed some bugs with window scaling **COMEPELTE**
 
 # References & Citations
 
