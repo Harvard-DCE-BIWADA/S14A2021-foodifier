@@ -175,12 +175,24 @@ def account():
 @app.route('/update/user', methods = ['POST'])
 def update_user():
     user = users.query.filter_by(username=session['username']).first()
-    user.username = request.form['username']    
-    user.password = sha256_crypt.hash(request.form['password'])
-    #print(str(user.password))
-    Db.session.commit()
-    session['username'] = request.form['username']
-    return redirect(url_for('profile'))
+    username = request.form['username']  
+    password = request.form['password']
+    if username and password:
+        test_user = users.query.filter_by(username=username).first()
+        if not test_user:
+            user.username = request.form['username']    
+            user.password = sha256_crypt.hash(request.form['password'])
+            #print(str(user.password))
+            Db.session.commit()
+            session['username'] = request.form['username']
+            return redirect(url_for('profile'))
+        else:
+            flash('Username already taken')
+            return redirect("/account")
+    else:
+        flash('Please input a username and password')
+        return redirect("/account")
+    
 
 @app.route('/delete/user', methods = ['POST'])
 def delete_user():
