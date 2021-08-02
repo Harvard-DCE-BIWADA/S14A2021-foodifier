@@ -14,6 +14,8 @@ CSCI S14A - Building Interactive Web Applications for Data Analysis
 
 **Website Location**: https://foodifier.herokuapp.com/
 
+**Screencast** https://youtu.be/LpE5hDDL5V4
+
 ### Team Members
 
 Arda Eğrioğlu
@@ -95,7 +97,6 @@ Alden Eberts
 4. Implement the rest of the CRUD methods + forms for them **COMEPLETE**
 5. Implement more bootstrap and css **COMEPLETE**
 6. Fixed bug with api and wrong foodnames **COMEPLETE**
-7. Fixed some bugs with window scaling **COMEPELTE**
 
 # References & Citations
 
@@ -134,3 +135,7 @@ https://keras.io/examples/vision/image_classification_efficientnet_fine_tuning/
 https://notebook.community/stratospark/food-101-keras/Food%20Classification%20with%20Deep%20Learning%20in%20Keras#Training
 
 https://colab.research.google.com/github/theimgclist/examples/blob/MultiClassTF2.0/community/en/multi_class_classification/food_classifier.ipynb#scrollTo=MS5NI8Py77sA
+
+UI Image:
+https://images.all-free-download.com/images/graphicthumb/vector_fresh_fruit_seamless_pattern_graphics_583573.jpg
+
