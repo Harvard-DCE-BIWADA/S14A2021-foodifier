@@ -28,7 +28,8 @@ CREATE TABLE public.foods (
     fid integer NOT NULL,
     uid integer NOT NULL,
     foodname text NOT NULL,
-    calorie integer NOT NULL
+    calorie integer NOT NULL,
+    date timestamp with time zone
 );
 
 
@@ -203,9 +204,22 @@ ALTER TABLE ONLY public.users ALTER COLUMN uid SET DEFAULT nextval('public.users
 -- Data for Name: foods; Type: TABLE DATA; Schema: public; Owner: 37114702162
 --
 
-COPY public.foods (fid, uid, foodname, calorie) FROM stdin;
-1	1	sushi	21
-2	1	frozen yogurt	61
+COPY public.foods (fid, uid, foodname, calorie, date) FROM stdin;
+1	1	sushi	21	\N
+2	1	frozen yogurt	61	\N
+6	6	Frozen yogurt	61	2021-08-02 02:37:29.593731+03
+7	6	Pizza	268	2021-08-02 02:37:29.593731+03
+8	6	Seaweed salad	35	2021-08-02 02:58:55.915878+03
+9	6	Hot dog	305	2021-08-02 02:58:55.915878+03
+10	6	Steak	294	2021-08-02 04:49:40.852629+03
+11	8	omelet	154	2021-08-02 05:59:26.756145+03
+12	8	Hot dog	305	2021-08-02 06:07:19.784321+03
+13	8	Apple pie	265	2021-08-02 06:07:19.784321+03
+14	8	bread	267	2021-08-02 06:07:19.784321+03
+15	1	Sushi	21	2021-08-02 14:37:29.03954+03
+16	1	Hot dog	305	2021-08-02 14:43:57.941758+03
+17	1	shepards pie	245	2021-08-02 14:43:57.941758+03
+18	11	Hot dog	305	2021-08-02 14:43:57.941758+03
 \.
 
 
@@ -234,7 +248,12 @@ COPY public.userdashboard (uid, username, weeklyg, weekly, dailyg, daily) FROM s
 COPY public.users (uid, username, password, weeklyg, weekly, dailyg, daily, firstlogin) FROM stdin;
 2	TestUser	$5$rounds=535000$Sz2fZU.BoBiesbAu$rZmuvtSTj3IJpP1anIfXF5uFatPO4wW0KFWE2N9IUBB	0	0	1000	0	\N
 3	Time	$5$rounds=535000$53fVbWVbzm9tcZ7H$sIo8vmoUqyqVaBCy5aqGSuUHSuxHBbhBWf4.ukG.du7	0	0	1000	0	7
-1	Arda	$5$rounds=535000$Xdabu3A7rSOowBK0$.zQ8T.LHBSnPTYXRJGBZ9SXV9y/SHom5/BvK09RcXk7	0	61	1000	61	7
+6	boberta	boberta	10000	963	2000	963	7
+8	loaf	$5$rounds=535000$.BVIkEfxPY0WkQDf$F7Wt5zxV91SUsdbRklXm8c6qkFOR8JFBF5GH7Iil.01	14000	991	2000	991	7
+9	bob	$5$rounds=535000$rlGWKaN2q9vljfcn$OsRv9rMm6JePj89AzAXze9StplpRvbVNa83V40z3L01	14000	0	2000	0	1
+10	jim	$5$rounds=535000$Jx5ujOZKquulyF1X$RUkJHNCoN.BCSveMmmQb7Z8azVCpv2slthmO.3ojbd9	7000	0	1000	0	1
+1	Arda	$5$rounds=535000$Xdabu3A7rSOowBK0$.zQ8T.LHBSnPTYXRJGBZ9SXV9y/SHom5/BvK09RcXk7	12000	632	2000	571	1
+11	Nimet	$5$rounds=535000$TueP8HpQNS/f8Nv.$iLTC4u51P36mBb3Bk6OEBDwDpDXgYw4KpKcxCG8BuDD	14000	305	2000	305	1
 \.
 
 
@@ -242,7 +261,7 @@ COPY public.users (uid, username, password, weeklyg, weekly, dailyg, daily, firs
 -- Name: foods_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: 37114702162
 --
 
-SELECT pg_catalog.setval('public.foods_fid_seq', 2, true);
+SELECT pg_catalog.setval('public.foods_fid_seq', 18, true);
 
 
 --
@@ -263,7 +282,7 @@ SELECT pg_catalog.setval('public.userdashboard_uid_seq', 1, false);
 -- Name: users_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: 37114702162
 --
 
-SELECT pg_catalog.setval('public.users_uid_seq', 4, true);
+SELECT pg_catalog.setval('public.users_uid_seq', 11, true);
 
 
 --
