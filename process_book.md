@@ -79,10 +79,26 @@ Alden Eberts
 2. Improve the Dashboard UI **Started but could not comeplete because I did not have the database and food storing was not working with the database**
 3. Add a text input for the food if the prediction was wrong **COMEPLETE**
 
+# Milestone 5 Tasks
+
+Arda Eğrioğlu
+1. Implement CSS Warnings
+2. Add DB Migration
+3. Make the daily and weekly resets
+
+Alden Eberts
+1. Create models on the full dataset **COMEPLETE**
+2. Improve the Dashboard UI **COMEPLETE**
+3. Fixed Database structuring for food storage **COMEPLETE**
+4. Implement the rest of the CRUD methods + forms for them **COMEPLETE**
+5. Implement more bootstrap and css **COMEPLETE**
+6. Fixed bug with api and wrong foodnames **COMEPLETE**
 
 # References & Citations
 
 DEMO MODEL - https://drive.google.com/drive/folders/1ZTFDsny9M3-YL79Dr6yLNrDviNXrGCut?usp=sharing
+
+FOLDER CONTAINING ALL MODELS TESTED ON FULL DATASET - https://drive.google.com/drive/folders/1e7rKSDGY9gZkWkDRwqST6nTHiL4UBtTd?usp=sharing
 
 DEMO SLIDES - https://docs.google.com/presentation/d/1Cpi0MnAzPUu-WqRUD9jnr6DfIVSeLF5ch7C5AFxx-jw/edit?usp=sharing
 
@@ -109,3 +125,5 @@ https://bhashkarkunal.medium.com/image-classification-api-creation-using-tensorf
 https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/vision/ipynb/image_classification_efficientnet_fine_tuning.ipynb#scrollTo=5pPrervcOfEY
 
 https://keras.io/examples/vision/image_classification_efficientnet_fine_tuning/
+
+https://notebook.community/stratospark/food-101-keras/Food%20Classification%20with%20Deep%20Learning%20in%20Keras#Training
