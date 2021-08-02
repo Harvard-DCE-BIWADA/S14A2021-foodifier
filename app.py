@@ -35,10 +35,11 @@ import psycopg2
 load_dotenv('.env')
 
 
-UPLOAD_FOLDER = 'static/uploads'
+
 
 # Initialize app
 app = Flask(__name__)
+UPLOAD_FOLDER = os.path.join( app.root_path,'static/uploads')
 app.secret_key = environ.get('SECRET_KEY')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -211,7 +212,6 @@ def edit_goals():
 @app.route('/profile')
 def profile():
     today = datetime.isoweekday(date.today())
-    app.logger.info("hello world")
     if 'username' in session: 
         if session['username'] != '':
             user = users.query.filter_by(username=session['username']).first()
@@ -266,6 +266,7 @@ def save_uploaded_image( file ):
     if file and allowed_file( file.filename ):
         file_name = secure_filename( file.filename )
         file_path = os.path.join( app.root_path, app.config[ 'UPLOAD_FOLDER' ], file_name )
+        print(file_path)
         file.save( file_path )
         return file_path
     else:
@@ -302,7 +303,7 @@ def upload_file():
             
         print( "file to process: ", file, file.split( '/' )[ -1 ] )
         probs, output = predict( file )
-        print( output )
+        #print( output )
         sorted( output, key = output.get )
         global class_names
         print(
@@ -444,7 +445,7 @@ def predict(file):
     labels = dict(sorted(labels.items(), key=lambda k: k[1], reverse=True))
     for key, val in labels.items():
         labels[key] = f"{round(val*100, 2)}%"
-    print(labels)
+    #print(labels)
     labels = {k: labels[k] for k in list(labels)[:5]}
     #score = tf.nn.softmax(probs[0])
     return probs, labels
