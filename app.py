@@ -407,17 +407,22 @@ def history():
 
 
 #ADAPTED FROM - https://github.com/mitkir/keras-flask-image-classifier/blob/master/application.py 
-
+"""
 allowed_extensions = set(["jpg", "jpeg", "png"])
 image_size = (224, 224)
 path = os.path.join(app.root_path, "first_model")
 model = load_model(path)
+"""
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in allowed_extensions
 
 def predict(file):
+    allowed_extensions = set(["jpg", "jpeg", "png"])
+    image_size = (224, 224)
+    path = os.path.join(app.root_path, "first_model")
+    model = load_model(path)
     print("running predict")
     img = load_img(file, target_size = image_size)
     img = img_to_array(img)
