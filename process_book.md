@@ -71,8 +71,8 @@ Alden Eberts
 # Milestone 4 Tasks
 
 Arda Eğrioğlu
-1. Fix previous errors with the database
-2. Get food storing working with the database
+1. Fix previous errors with the database **COMEPLETE**
+2. Get food storing working with the database **COMEPLETE**
 
 Alden Eberts
 1. Make the option to take a picture **COMEPLETE**
@@ -82,9 +82,11 @@ Alden Eberts
 # Milestone 5 Tasks
 
 Arda Eğrioğlu
-1. Implement CSS Warnings
-2. Add DB Migration
-3. Make the daily and weekly resets
+1. Implement CSS Warnings **COMEPLETE**
+2. Add DB Migration **COMEPLETE**
+3. Make the daily and weekly resets **COMEPLETE**
+4. Sanitaze the user inputs **COMEPLETE**
+5. Change the login/register UI **COMEPLETE**
 
 Alden Eberts
 1. Create models on the full dataset **COMEPLETE**

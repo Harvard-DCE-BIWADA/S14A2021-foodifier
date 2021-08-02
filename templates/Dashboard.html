@@ -4,8 +4,14 @@
 {% block scripts %}
 {% endblock %}
 
-{% block content %}
+{% block styles %}
 
+<link rel="stylesheet" href="../static/css/signup.css">
+
+{% endblock %}
+
+{% block content %}
+<div class = "outline">
     {% if session_username is defined %}
 
         <h1>Hi, {{ session_username }}!</h1>
@@ -95,4 +101,5 @@
             }
         }
     </script>
+    </div>
 {% endblock %}

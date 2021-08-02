@@ -205,6 +205,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN uid SET DEFAULT nextval('public.users
 
 COPY public.foods (fid, uid, foodname, calorie) FROM stdin;
 1	1	sushi	21
+2	1	frozen yogurt	61
 \.
 
 
@@ -233,7 +234,7 @@ COPY public.userdashboard (uid, username, weeklyg, weekly, dailyg, daily) FROM s
 COPY public.users (uid, username, password, weeklyg, weekly, dailyg, daily, firstlogin) FROM stdin;
 2	TestUser	$5$rounds=535000$Sz2fZU.BoBiesbAu$rZmuvtSTj3IJpP1anIfXF5uFatPO4wW0KFWE2N9IUBB	0	0	1000	0	\N
 3	Time	$5$rounds=535000$53fVbWVbzm9tcZ7H$sIo8vmoUqyqVaBCy5aqGSuUHSuxHBbhBWf4.ukG.du7	0	0	1000	0	7
-1	Arda	$5$rounds=535000$Xdabu3A7rSOowBK0$.zQ8T.LHBSnPTYXRJGBZ9SXV9y/SHom5/BvK09RcXk7	0	0	1000	0	7
+1	Arda	$5$rounds=535000$Xdabu3A7rSOowBK0$.zQ8T.LHBSnPTYXRJGBZ9SXV9y/SHom5/BvK09RcXk7	0	61	1000	61	7
 \.
 
 
@@ -241,7 +242,7 @@ COPY public.users (uid, username, password, weeklyg, weekly, dailyg, daily, firs
 -- Name: foods_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: 37114702162
 --
 
-SELECT pg_catalog.setval('public.foods_fid_seq', 1, true);
+SELECT pg_catalog.setval('public.foods_fid_seq', 2, true);
 
 
 --

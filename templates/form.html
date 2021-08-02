@@ -2,7 +2,13 @@
 {% extends "layout.html" %}
 {% block scripts %}
 {% endblock %}
+{% block styles %}
+
+<link rel="stylesheet" href="../static/css/signup.css">
+
+{% endblock %}
 {% block content %}
+<div class = "outline">
 {% if account %}
 <form class="form needs-validation" method="POST" action="/update/user" novalidate>
     {{form.hidden_tag()}}
@@ -48,4 +54,5 @@
     </div>
 </form>
 {% endif %}
+</div>
 {% endblock %}

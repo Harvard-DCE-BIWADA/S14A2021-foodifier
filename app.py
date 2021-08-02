@@ -248,6 +248,21 @@ def profile():
 
 @app.route('/update/goals', methods = ['POST'])
 def update_goals():
+    
+    
+    dgoal = request.form['dgoal']  
+    wgoal = request.form['wgoal']
+    if wgoal:
+        try: 
+            wgoal = int(wgoal)
+            dgoal = int(dgoal)
+        except ValueError:
+            flash('Please input a number')
+            return redirect("/edit_goals")
+
+    
+    
+
     user = users.query.filter_by(username=session['username']).first()
     user.dailyg = request.form['dgoal']    
     user.weeklyg = request.form['wgoal']

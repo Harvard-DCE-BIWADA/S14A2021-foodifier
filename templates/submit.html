@@ -2,8 +2,15 @@
 {% extends "layout.html" %}
 {% block scripts %}
 {% endblock %}
+{% block styles %}
+
+<link rel="stylesheet" href="../static/css/dahsboard.css">
+
+{% endblock %}
 {% block content %}
+<div class = "outline">
 {% if not label %}
+
 <div class="booth">
     <h2>Take A Photo</h2>
     <video id ="video" width="380" height="300" autoplay></video>
@@ -77,4 +84,5 @@
         im.style.display = "block"
     }
 </script>
+</div>
 {% endblock %}
