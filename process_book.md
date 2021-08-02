@@ -116,6 +116,8 @@ https://arifulislam-ron.medium.com/flask-web-application-to-classify-image-using
 
 https://medium.com/@limkenghin/deploying-tensorflow-2-0-model-on-heroku-1b5cd49f8a2 
 
+Used Mainly To Create The Models/Models Adapted From These
+
 https://www.tensorflow.org/tutorials/images/classification
 
 https://github.com/faizan170/tensorflow-image-classification-flask-deployment
@@ -127,3 +129,5 @@ https://colab.research.google.com/github/keras-team/keras-io/blob/master/example
 https://keras.io/examples/vision/image_classification_efficientnet_fine_tuning/
 
 https://notebook.community/stratospark/food-101-keras/Food%20Classification%20with%20Deep%20Learning%20in%20Keras#Training
+
+https://colab.research.google.com/github/theimgclist/examples/blob/MultiClassTF2.0/community/en/multi_class_classification/food_classifier.ipynb#scrollTo=MS5NI8Py77sA
