@@ -6,19 +6,27 @@ body {
 }
 
 .outline{
-    display: flex;
-    align-items: center center;
-    justify-content: center;
+    
 }
 
 #headerthing{
+    display: flex;
+    align-items: center center;
+    justify-content: center;
     background-color: rgba(255, 255, 255, 0.9);
     margin-left: 50%;
 }
+
+#headerthing section{
+    display: block;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
 .outline section{
     display: block;
     background-color: rgba(255, 255, 255, 0.9);
 }
+
 @media (min-height: 570px){ /*https://stackoverflow.com/questions/12645366/css-responsive-center-div*/
     .outline section{
         display: block;
@@ -29,5 +37,15 @@ body {
         background-color: rgba(255, 255, 255, 0.9);
         padding: 30px;
     }
+    #headerthing section{
+        display: block;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+    }
+}
+
+.imgth img{
+    width: auto;
+    height: 600;
 }
 

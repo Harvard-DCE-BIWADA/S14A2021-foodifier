@@ -38,10 +38,10 @@
 {% if label %}
 <div class="col-lg-4" id = "centerarea">
     <div class="page-header" id = "headerthing">
-        <div class = "back" style="display: inline;">
+        <section>
             <h3 id="tables">Result: {{prediction}}</h3>
             <p>If none of the predictions were correct 
-                <button style = "display: inline-flex;" class = "btn btn-light" onclick="toggleTextOn()">Click Here</button></p>
+                <button style = "display: inline-flex;" class = "btn btn-light" onclick="toggleTextOn()" id="toggle_btn">Click Here</button></p>
             
             <form style="padding-left: 20px; padding-bottom: 20px;" class = "hidden_form" id = "text_box" method="POST" action="/corrected_food" style="display: none;">
                 <p>Input the name of the food</p>
@@ -50,7 +50,9 @@
                 <br />
                 <button class = "btn btn-light" id = 'get_calories' style="display: none;"><a href="/calories/{{prediction}}">Get Calories</a></button>
             </form>
-        </div>  
+        </section>
+            
+          
     
     </div>
     <table class="table table-hover table-dark">
@@ -61,7 +63,7 @@
             </tr>
         </thead>
         <tr>
-            <th scope="row" rowspan = "6"> <img width="600" height="600" src="static/uploads/{{imagesource}}" /> </th>
+            <th class = "imgth" scope="row" rowspan = "6"> <img src="static/uploads/{{imagesource}}" /> </th>
             {% for key, val in label.items() %}
                 <tr>
                     <td> {{key}}: {{val}} </td>
@@ -79,8 +81,11 @@
 <script src="../static/js/video.js"></script>
 <script>
     function toggleTextOn() {
+        var btn = document.getElementById("toggle_btn")
         var text = document.getElementById("text_box");
+        btn.style.display = "none"
         text.style.display = "block";
+
     }
     function submit_available(){
         var sub = document.getElementById("hide")
