@@ -11,30 +11,34 @@
 {% block content %}
 
 {% if not label %}
-
-<div class="booth">
-    <h2>Take A Photo</h2>
-    <video id ="video" width="380" height="300" autoplay></video>
-    <a href="#" id="capture" class = "booth-capture-button" onclick="submit_available()">Take Photo</a>
-    <canvas id="canvas" width="400" height="300"></canvas>
-    <img style = "display: none;"id = "photo" src="" alt="your image of the food">
-    <form id = "hide" style="display: none;" action="/submit_image" method=post enctype=multipart/form-data>
-        <input class = "hidden" id = 'linksub' type="text" name="link">
-        <input type="submit" value="Upload">
-    </form>
-    <h2>Upload A Photo</h2>
-    <form action="/submit_image" method=post enctype="multipart/form-data">
-        <input type="file" name="upload" required>
-        <input type="submit" value="Upload">
-    </form>
+<div class = "outline">
+    <section>
+        <div class="booth">
+            <h2>Take A Photo</h2>
+            <video id ="video" width="380" height="300" autoplay></video>
+            <a href="#" id="capture" class = "booth-capture-button" onclick="submit_available()">Take Photo</a>
+            <canvas id="canvas" width="400" height="300"></canvas>
+            <img style = "display: none;"id = "photo" src="" alt="your image of the food">
+            <form id = "hide" style="display: none;" action="/submit_image" method=post enctype=multipart/form-data>
+                <input class = "hidden" id = 'linksub' type="text" name="link">
+                <input type="submit" value="Upload">
+            </form>
+            <h2>Upload A Photo</h2>
+            <form action="/submit_image" method=post enctype="multipart/form-data">
+                <input type="file" name="upload" required>
+                <input type="submit" value="Upload">
+            </form>
+        </div>
+    </section>
 </div>
+
 
 {% endif %}
 {# ADAPTED FROM https://github.com/mitkir/keras-flask-image-classifier #}
 {% if label %}
 <div class="col-lg-4" id = "centerarea">
     <div class="page-header" id = "headerthing">
-        <div class = "back" style="display: inline; margin-left: auto; margin-right: auto;">
+        <div class = "back" style="display: inline;">
             <h3 id="tables">Result: {{prediction}}</h3>
             <p>If none of the predictions were correct 
                 <button style = "display: inline-flex;" class = "btn btn-light" onclick="toggleTextOn()">Click Here</button></p>
