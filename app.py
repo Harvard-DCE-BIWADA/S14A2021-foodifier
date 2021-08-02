@@ -413,13 +413,14 @@ image_size = (224, 224)
 path = os.path.join(app.root_path, "first_model")
 model = load_model(path)
 """
+allowed_extensions = set(["jpg", "jpeg", "png"])
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in allowed_extensions
 
 def predict(file):
-    allowed_extensions = set(["jpg", "jpeg", "png"])
+    
     image_size = (224, 224)
     path = os.path.join(app.root_path, "first_model")
     model = load_model(path)
