@@ -12,7 +12,8 @@
 
 {% block content %}
 <div class = "outline">
-    {% if session_username is defined %}
+    <section>
+        {% if session_username is defined %}
 
         <h1>Hi, {{ session_username }}!</h1>
         <h1 id = "statswd">Way to your daily goal: {{daily_calories}}/{{daily_goal}}</h1>
@@ -101,5 +102,7 @@
             }
         }
     </script>
+    </section>
+    
     </div>
 {% endblock %}

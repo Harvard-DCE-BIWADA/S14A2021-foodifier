@@ -75,4 +75,10 @@ html {
    margin-left: 20%;
  }
 
+  .navbar-fixed-top {
+    top: -70px; /* you'll have to figure out the exact number here */
+  }
 
+  .navbar-fixed-top, .navbar-fixed-bottom {
+    position: relative; /* this can also be static */
+  }

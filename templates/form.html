@@ -9,50 +9,53 @@
 {% endblock %}
 {% block content %}
 <div class = "outline">
-{% if account %}
-<form class="form needs-validation" method="POST" action="/update/user" novalidate>
-    {{form.hidden_tag()}}
-    {% for field in form %}
-        {% if field.id != 'submit' and field.id != 'csrf_token' %}
-            <div class="form-group">
-                {{ field.label }}:
-                {{ field(class="form-control") }}
-                {% if field.errors %}
-                    {% for error in field.errors %}
-                        <p class="form-error-message">{{ error }}</p>
-                    {% endfor %}
+    <section>
+        {% if account %}
+        <form class="form needs-validation" method="POST" action="/update/user" novalidate>
+            {{form.hidden_tag()}}
+            {% for field in form %}
+                {% if field.id != 'submit' and field.id != 'csrf_token' %}
+                    <div class="form-group">
+                        {{ field.label }}:
+                        {{ field(class="form-control") }}
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <p class="form-error-message">{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                 {% endif %}
+            {% endfor %}
+            <div class="form-submit">
+                {{ form.submit(class="btn btn-primary btn-lg btn-block") }}
             </div>
+        </form>
+        <form class="form needs-validation" method="POST" action="/delete/user" novalidate>
+            <button class = "btn btn-primary btn-lg btn-block">Delete Account</button>
+        </form>
+        
+        {% else %}
+        <form class="form needs-validation" method="POST" action="/update/goals" novalidate>
+            {{form.hidden_tag()}}
+            {% for field in form %}
+                {% if field.id != 'submit' and field.id != 'csrf_token' %}
+                    <div class="form-group">
+                        {{ field.label }}:
+                        {{ field(class="form-control") }}
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <p class="form-error-message">{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <div class="form-submit">
+                {{ form.submit(class="btn btn-primary btn-lg btn-block") }}
+            </div>
+        </form>
         {% endif %}
-    {% endfor %}
-    <div class="form-submit">
-        {{ form.submit(class="btn btn-primary btn-lg btn-block") }}
-    </div>
-</form>
-<form class="form needs-validation" method="POST" action="/delete/user" novalidate>
-    <button class = "btn btn-primary btn-lg btn-block">Delete Account</button>
-</form>
+        </div>
+    </section>
 
-{% else %}
-<form class="form needs-validation" method="POST" action="/update/goals" novalidate>
-    {{form.hidden_tag()}}
-    {% for field in form %}
-        {% if field.id != 'submit' and field.id != 'csrf_token' %}
-            <div class="form-group">
-                {{ field.label }}:
-                {{ field(class="form-control") }}
-                {% if field.errors %}
-                    {% for error in field.errors %}
-                        <p class="form-error-message">{{ error }}</p>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        {% endif %}
-    {% endfor %}
-    <div class="form-submit">
-        {{ form.submit(class="btn btn-primary btn-lg btn-block") }}
-    </div>
-</form>
-{% endif %}
-</div>
 {% endblock %}
