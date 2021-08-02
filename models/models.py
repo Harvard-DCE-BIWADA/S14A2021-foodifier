@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 Db = SQLAlchemy()
 
@@ -30,6 +31,7 @@ class foods(Db.Model):
     uid = Db.Column(Db.Integer)
     foodname = Db.Column(Db.String(64))
     calorie = Db.Column(Db.Integer)
+    date = Db.Column(Db.DateTime, nullable = True, default = datetime.now())
 
 
 

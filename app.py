@@ -11,7 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, bindparam
 from models.models import Db, users, foods
 #from models.goals import UserGoals
-from forms.forms import SignupForm, LoginForm, UpdateGoals
+from forms.forms import SignupForm, LoginForm, UpdateGoals, UpdateAccount
 from passlib.hash import sha256_crypt
 import gunicorn
 import numpy as np
@@ -90,7 +90,7 @@ def user_create():
         print("error")
         return redirect(url_for('signup'))
     else:
-        user = users(username=username, password=sha256_crypt.hash(password),weeklyg = 0, weekly = 0, dailyg = 1000, daily = 0, firstlogin = today)        
+        user = users(username=username, password=sha256_crypt.hash(password),weeklyg = 7000, weekly = 0, dailyg = 1000, daily = 0, firstlogin = today)        
         Db.session.add(user)
         Db.session.commit()
         #user = User.query.filter_by(username=username).first()
@@ -149,15 +149,50 @@ def login():
 
 
 
-@app.route('/logout', methods=['POST'])
+@app.route('/logout', methods=['POST', 'GET'])
 def logout():
     # Logout
     global total_calories
     total_calories = 0
     session.clear()
-    return redirect(url_for('index'))
-    
+    return redirect(url_for('index'))   
 
+@app.route('/account')
+def account():
+    if 'username' in session: 
+        if session['username'] != '':
+            user = users.query.filter_by(username=session['username']).first()
+            form = UpdateAccount()
+            form.username.default = str(user.username)
+            form.process()
+            return render_template('form.html', form=form, account = True)
+    else:
+        return redirect("login")
+
+@app.route('/update/user', methods = ['POST'])
+def update_user():
+    user = users.query.filter_by(username=session['username']).first()
+    user.username = request.form['username']    
+    user.password = sha256_crypt.hash(request.form['password'])
+    print(str(user.password))
+    Db.session.commit()
+    session['username'] = request.form['username']
+    return redirect(url_for('profile'))
+
+@app.route('/delete/user', methods = ['POST'])
+def delete_user():
+    if 'username' in session and session['username'] != '':
+        user = users.query.filter_by( username = session['username'] ).first()
+        food_list = foods.query.filter_by( uid = user.uid ).all()
+        for food in food_list:
+            Db.session.delete(food)
+            Db.session.commit()
+        
+        Db.session.delete(user)
+        Db.session.commit()
+        return redirect('/logout')
+    else:
+        return redirect('/login')
 
 @app.route('/signup')
 def signup():
@@ -165,12 +200,12 @@ def signup():
     form = SignupForm()
 
     return render_template( 'signup.html', title='Signup', form=form)
-"""
+
 @app.route('/edit_goals')
 def edit_goals():
     form = UpdateGoals()
     return render_template('form.html', form=form)
-"""
+
 @app.route('/profile')
 def profile():
     today = datetime.isoweekday(date.today())
@@ -180,32 +215,43 @@ def profile():
             user = users.query.filter_by(username=session['username']).first()
             uid = user.uid
             dailyg = user.dailyg
-            calories = user.daily
+            daily_calories = user.daily
+            weekly_calories = user.weekly
+            weeklyg = user.weeklyg
             print(uid)
-            global total_calories
-            user_goals = users.query.filter_by(uid=uid).first()
+            food_list = foods.query.filter_by(uid=uid).all()
+            same_day = []
+            same_week = []
+            now = datetime.now()
+            y = now.isocalendar()
+            for food in food_list:
+                if food.date:
+                    x = food.date.isocalendar() #because some foods don't have the date
+                    if x[0] == y[0]:
+                        if x[1] == y[1]:
+                            same_week.append(food)
+                            if x[2] == y[2]:
+                                same_day.append(food)
             if user.firstlogin != today:
                 print('working')
                 user.daily = 0
                 
                 user.firstlogin = today
                 Db.session.commit()
-                return render_template('Dashboard.html', session_username = session['username'],calories=calories, daily_goal = dailyg)
+                return render_template('Dashboard.html', session_username = session['username'],daily_calories=daily_calories, daily_goal = dailyg, daily_foods = same_day, weekly_foods = same_week, weekly_calories = weekly_calories, weekly_goal = weeklyg)
             else:
-                return render_template('Dashboard.html', session_username = session['username'],calories=calories, daily_goal = dailyg) # where the user can set up their profile/calorie goals etc...
+                return render_template('Dashboard.html', session_username = session['username'],daily_calories=daily_calories, daily_goal = dailyg, daily_foods = same_day, weekly_foods = same_week, weekly_calories = weekly_calories, weekly_goal = weeklyg) # where the user can set up their profile/calorie goals etc...
     else:
         return redirect("login")
-"""
+
 @app.route('/update/goals', methods = ['POST'])
 def update_goals():
-    user = User.query.filter_by(username=session['username']).first()
-    uid = user.uid
-    user_goals = UserGoals.query.filter_by(uid=uid).first()
-    print(user_goals)
-    user_goals.daily = request.form['goal']    
+    user = users.query.filter_by(username=session['username']).first()
+    user.dailyg = request.form['dgoal']    
+    user.weeklyg = request.form['wgoal']
     Db.session.commit()
     return redirect(url_for('profile'))
-"""
+
 @app.route('/about')
 def extra_info():
     if 'username' in session:
@@ -269,11 +315,12 @@ def upload_file():
 @app.route('/calories/<foodname>', methods =['POST', 'GET'])
 def calories(foodname):
     if request.method == 'GET':
-        
+        if foodname == "Omelette":
+            foodname = "omelet"
         html_food_name = foodname.replace("_", " ")
         foodname = foodname.replace("_", "%20")
         print(html_food_name)
-        
+        no_info = False
         info = requests.get(f"https://api.edamam.com/api/food-database/v2/parser?app_id=c344f636&app_key=d2f4167ff9fc425ee9b8e5569d56e8f5&ingr={foodname}&nutrition-type=logging&category=generic-foods").json()
         try:
             calories = info["parsed"][0]["food"]["nutrients"]["ENERC_KCAL"]
@@ -282,6 +329,7 @@ def calories(foodname):
                 calories = info["hints"][0]["food"]["nutrients"]["ENERC_KCAL"]
             except:
                 calories = "No Information Available"
+                no_info = True
         try:
             protein = info["parsed"][0]["food"]["nutrients"]["PROCNT"]
         except:
@@ -306,7 +354,7 @@ def calories(foodname):
                 fibre = "No Information Available"
     
         print(f"calories: {calories}\nprotein: {protein}\nfat: {fat}\nfibre: {fibre}")
-        return render_template("calories.html", name=html_food_name, calories=calories, protein=protein, fat=fat, fibre=fibre)
+        return render_template("calories.html", name=html_food_name, calories=calories, protein=protein, fat=fat, fibre=fibre, no_info=no_info)
         # shows the calories from the image (maybe not just calories)
     """
     else:

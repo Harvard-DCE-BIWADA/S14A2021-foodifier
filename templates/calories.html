@@ -32,10 +32,16 @@
     </tr>
     
 </table> 
+{% if no_info %}
+<form method="get" action='/profile'>
+    <button class = "btn btn-light">Profile</button>
+</form>
+{% else %}
 <form method="post" action='/add_food'>
     <button class = "btn btn-light">Add Food</button>
     <input type = "hidden" id = 'foodname' name="foodname" value = "{{name}}">
     <input type = "hidden" id = 'calories' name="calories" value = "{{calories}}">
 </form>
+{% endif %}
 
 {% endblock %}

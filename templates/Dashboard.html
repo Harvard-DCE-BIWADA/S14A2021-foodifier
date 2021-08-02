@@ -9,42 +9,90 @@
     {% if session_username is defined %}
 
         <h1>Hi, {{ session_username }}!</h1>
-        <h1>Way to your goal: {{calories}}/{{daily_goal}}</h1>
+        <h1 id = "statswd">Way to your daily goal: {{daily_calories}}/{{daily_goal}}</h1>
 
     {% else %}
 
         <h1>Hi, guest!</h1>
 
     {% endif %}
-    <table class="table table-hover">
+    <table class="table table-hover" id = "daily_table" style="display: table;">
         <thead>
             <tr>
                 <th scope = "col">Food Name</th>
-                <th scope = "col" colspan="4">Nutrition Stats</th>
+                <th scope = "col" colspan="4">Calories</th>
             </tr>
         </thead>
         <tbody>
-
+            {% for food in daily_foods %}
+            <tr>
+                <td>{{food.foodname}}</td>
+                <td>{{food.calorie}}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td><b>Total</b></td>
+                <td><b>{{daily_calories}}</b></td>
+            </tr>
         </tbody>
     </table>
+
+    <table class="table table-hover" id = "weekly_table" style="display: none;">
+        <thead>
+            <tr>
+                <th scope = "col">Food Name</th>
+                <th scope = "col" colspan="4">Calories</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for food in weekly_foods %}
+            <tr>
+                <td>{{food.foodname}}</td>
+                <td>{{food.calorie}}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td><b>Total</b></td>
+                <td><b>{{weekly_calories}}</b></td>
+            </tr>
+        </tbody>
+    </table>
+
     <div id="forms">
         {% if session_username is defined %}
-
-            <form action="/submit_image" method="GET">
-                <button type="submit"> Submit Image</button>
+            <button style="display: inline;" class = "btn btn-light" id = "wdstats" onclick="toggle()"> Weekly Stats</button>
+            <form style="display: inline;" action="/submit_image" method="GET">
+                <button class = "btn btn-light" type="submit"> Submit Image</button>
             </form>    
-            <form action="/logout" method="POST">
-                <button type="submit"> Log out</button>
-            </form>
 
         {% else %}
             <form action="/login" method="GET">
-                <button type="submit"> Log in</button>
+                <button class = "btn btn-light" type="submit"> Log in</button>
             </form>
             <form action="/signup" method="GET">
-                <button type="submit"> Sign up</button>
+                <button class = "btn btn-light" type="submit"> Sign up</button>
             </form>
         {% endif %}
     </div>
-
+    <script>
+        function toggle(){
+            var btn = document.getElementById("wdstats")
+            var daily_table = document.getElementById("daily_table")
+            var weekly_table = document.getElementById("weekly_table")
+            var text = document.getElementById("statswd")
+            if(btn.innerText == "Weekly Stats"){
+                btn.innerText = "Daily Stats"
+                daily_table.style.display = "none"
+                weekly_table.style.display = "table"
+                text.innerText = "Way to your weekly goal: {{weekly_calories}}/{{weekly_goal}}"
+                
+            }
+            else{
+                btn.innerText = "Weekly Stats"
+                daily_table.style.display = "table"
+                weekly_table.style.display = "none"
+                text.innerText = "Way to your weekly goal: {{daily_calories}}/{{daily_goal}}"
+            }
+        }
+    </script>
 {% endblock %}

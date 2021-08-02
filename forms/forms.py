@@ -14,11 +14,12 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
-
-class NewpostForm(FlaskForm):
-    content = TextAreaField('Content', validators=[DataRequired()])
-    submit = SubmitField('Post')
-
 class UpdateGoals(FlaskForm):
-    goal = IntegerField('Calorie Goal', validators = [DataRequired()]) 
+    dgoal = IntegerField('Daily Calorie Goal', validators = [DataRequired()]) 
+    wgoal = IntegerField('Weekly Calorie Goal', validators = [DataRequired()]) 
     submit = SubmitField('Update Goals')
+
+class UpdateAccount(FlaskForm):
+    username = StringField('Username', validators = [DataRequired()]) 
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Update Account')
