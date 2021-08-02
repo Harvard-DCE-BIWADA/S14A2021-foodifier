@@ -3,13 +3,13 @@
     {% with messages = get_flashed_messages() %}
   {% if messages %}
   
-    <ul class=flashes>
+    <ul class=flashes id = "flash" style="display: block;">
         
     {% for message in messages %}
     <div class="alert alert-info alert-dismissable" role="alert">
         {{ message }}
         
-        <button type="button" class="btn-close" data-dismiss="alert"></button>
+        <button type="button" class="btn-close" data-dismiss="alert" aria-label="close" onclick="close_alert()"></button>
         
         
     </div>
@@ -78,5 +78,11 @@
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <script>
+            function close_alert(){
+                var alert = document.getElementById("flash")
+                alert.style.display = "none"
+            }
+        </script>
     </body>
 </html>
