@@ -49,7 +49,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 # Initialize DB
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL').replace('postgres://', 'postgresql://') # this is to solve a bug in heroku
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-print(environ.get('DATABASE_URL'))
+#print(environ.get('DATABASE_URL'))
 Db.init_app(app)
 timer = 0
 
@@ -69,7 +69,7 @@ with open(path) as f:
 
 @app.route('/')
 def index():
-    print(session)
+    #print(session)
     if 'username' in session:
         return render_template('index.html', logged_in = True)
     else:
@@ -90,7 +90,7 @@ def user_create():
     # Control new credentials
     if username == '' or existing_user:
         flash('The username already exists. Please pick another one.')
-        print("error")
+        #print("error")
         return redirect(url_for('signup'))
     else:
         user = users(username=username, password=sha256_crypt.hash(password),weeklyg = 7000, weekly = 0, dailyg = 1000, daily = 0, firstlogin = today)        
@@ -114,7 +114,7 @@ def user_create():
 def login():
     
     
-    print(datetime.isoweekday(date.today()))
+    #print(datetime.isoweekday(date.today()))
     today = datetime.isoweekday(date.today())
     # Init form
     form = LoginForm()
@@ -128,7 +128,7 @@ def login():
 
         # Init user by Db query
         user = users.query.filter_by(username=username).first()
-        print(user)
+        #print(user)
 
         # Control login validity
         if user is None or not sha256_crypt.verify(password, user.password):
@@ -136,10 +136,10 @@ def login():
             return redirect(url_for('login'))
         else:
             session['username'] = username
-            print(username)
+            #print(username)
             user = users.query.filter_by(username=username).first()
             if user.firstlogin == Null:
-                print('Is Null')
+                #print('Is Null')
                 first_login = users(firstlogin = today)
                 Db.session.add(first_login)
                 Db.session.commit()
@@ -177,7 +177,7 @@ def update_user():
     user = users.query.filter_by(username=session['username']).first()
     user.username = request.form['username']    
     user.password = sha256_crypt.hash(request.form['password'])
-    print(str(user.password))
+    #print(str(user.password))
     Db.session.commit()
     session['username'] = request.form['username']
     return redirect(url_for('profile'))
@@ -220,7 +220,7 @@ def profile():
             daily_calories = user.daily
             weekly_calories = user.weekly
             weeklyg = user.weeklyg
-            print(uid)
+            #print(uid)
             food_list = foods.query.filter_by(uid=uid).all()
             same_day = []
             same_week = []
@@ -235,7 +235,7 @@ def profile():
                             if x[2] == y[2]:
                                 same_day.append(food)
             if user.firstlogin != today:
-                print('working')
+                #print('working')
                 user.daily = 0
                 
                 user.firstlogin = today
@@ -266,7 +266,7 @@ def save_uploaded_image( file ):
     if file and allowed_file( file.filename ):
         file_name = secure_filename( file.filename )
         file_path = os.path.join( app.root_path, app.config[ 'UPLOAD_FOLDER' ], file_name )
-        print(file_path)
+        #print(file_path)
         file.save( file_path )
         return file_path
     else:
@@ -277,7 +277,7 @@ def save_linked_image( link ):
     #print(link)
     if link and link != '':
         file_name = str( uuid.uuid4() ) + '.png'
-        print( file_name )
+        #print( file_name )
         file_path = os.path.join( app.root_path, app.config[ 'UPLOAD_FOLDER' ], file_name )
         urllib.request.urlretrieve( link, file_path )
         return file_path
@@ -288,8 +288,7 @@ def save_linked_image( link ):
 #ADAPTED FROM https://github.com/mitkir/keras-flask-image-classifier
 @app.route('/submit_image', methods=['GET', 'POST'])
 def upload_file():
-    print("upload image", flush=True, file=sys.stdout
-)
+    #print("upload image", flush=True, file=sys.stdout)
     if request.method == 'POST':
 
         if 'upload' in request.files:
@@ -301,15 +300,17 @@ def upload_file():
         #     flash( "Couldn't process image!", 'warning' )
         #     return redirect( url_for( 'index' ) )
             
-        print( "file to process: ", file, file.split( '/' )[ -1 ] )
+        #print( "file to process: ", file, file.split( '/' )[ -1 ] )
         probs, output = predict( file )
         #print( output )
         sorted( output, key = output.get )
         global class_names
+        """
         print(
             "This image most likely belongs to {}"
             .format(class_names[np.argmax(probs)])
         )
+        """
         
         return render_template("submit.html", label = output, imagesource = file.split( '/' )[ -1 ], prediction = list(output.keys())[0]) # area where you can submit the image for recognition
 
@@ -322,7 +323,7 @@ def calories(foodname):
             foodname = "omelet"
         html_food_name = foodname.replace("_", " ")
         foodname = foodname.replace("_", "%20")
-        print(html_food_name)
+        #print(html_food_name)
         no_info = False
         info = requests.get(f"https://api.edamam.com/api/food-database/v2/parser?app_id=c344f636&app_key=d2f4167ff9fc425ee9b8e5569d56e8f5&ingr={foodname}&nutrition-type=logging&category=generic-foods").json()
         try:
@@ -356,7 +357,7 @@ def calories(foodname):
             except:
                 fibre = "No Information Available"
     
-        print(f"calories: {calories}\nprotein: {protein}\nfat: {fat}\nfibre: {fibre}")
+        #print(f"calories: {calories}\nprotein: {protein}\nfat: {fat}\nfibre: {fibre}")
         return render_template("calories.html", name=html_food_name, calories=calories, protein=protein, fat=fat, fibre=fibre, no_info=no_info)
         # shows the calories from the image (maybe not just calories)
     """
@@ -384,7 +385,7 @@ def add_food():
     user = users.query.filter_by(username=session['username']).first()
     food_name = request.form['foodname']
     calories = float(request.form['calories'])
-    print(type(user.daily), type(user.weekly))
+    #print(type(user.daily), type(user.weekly))
 
     user.daily += int(calories)
     user.weekly += int(calories)
@@ -426,7 +427,7 @@ def predict(file):
     image_size = (224, 224)
     path = os.path.join(app.root_path, "first_model")
     model = load_model(path)
-    print("running predict")
+    #print("running predict")
     img = load_img(file, target_size = image_size)
     img = img_to_array(img)
     img = np.expand_dims(img, axis=0)

@@ -50,3 +50,7 @@ Milestone 3: ???
 Milestone 4: ???
 Milestone 5: ???
 Milestone 6: Present
+
+## In The Future
+
+1. There are many ways we could improve our app in the future. In the future we would implement a cleaner, more friendly looking U.I., try to improve the model, look into more apis (some of the calorie counts seem odd for the foods), implement tracking in more features other than just calories, and reccomend weekly and daily goals for the users based on what they want to achieve, their weight, and their height. We would also want to get this hosted online, but the model is too big for heroku and whenever we try to load it, the app crashes on heroku.  
