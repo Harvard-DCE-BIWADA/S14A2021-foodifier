@@ -15,10 +15,11 @@ from forms.forms import SignupForm, LoginForm, UpdateGoals, UpdateAccount
 from passlib.hash import sha256_crypt
 import gunicorn
 import numpy as np
-from werkzeug.utils import secure_filename
-from keras.models import Sequential, load_model
-from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 import tensorflow as tf
+from werkzeug.utils import secure_filename
+from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
+
 import requests
 from urllib.parse import urlparse
 import urllib.request 
