@@ -25,6 +25,7 @@ from urllib.parse import urlparse
 import urllib.request 
 import uuid
 from datetime import datetime, date
+import psycopg2
 
 
 
