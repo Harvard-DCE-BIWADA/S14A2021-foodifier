@@ -440,7 +440,7 @@ def allowed_file(filename):
 def predict(file):
     
     image_size = (224, 224)
-    path = os.path.join(app.root_path, "first_model")
+    path = os.path.join(app.root_path, "/Users/n.egrioglu1/Desktop/best_model")
     model = load_model(path)
     #print("running predict")
     img = load_img(file, target_size = image_size)

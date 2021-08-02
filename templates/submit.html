@@ -4,11 +4,12 @@
 {% endblock %}
 {% block styles %}
 
-<link rel="stylesheet" href="../static/css/dahsboard.css">
+
 
 {% endblock %}
-{% block content %}
 <div class = "outline">
+{% block content %}
+
 {% if not label %}
 
 <div class="booth">
@@ -84,5 +85,6 @@
         im.style.display = "block"
     }
 </script>
-</div>
+
 {% endblock %}
+</div>
