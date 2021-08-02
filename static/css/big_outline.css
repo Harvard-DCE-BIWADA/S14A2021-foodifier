@@ -1,0 +1,41 @@
+.outline_big{
+    display: flex;
+    align-items: center center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    margin-left: 50%;
+}
+
+@media (min-height: 800px){ /*https://stackoverflow.com/questions/12645366/css-responsive-center-div*/
+    .outline_big section{
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+    }
+    #headerthing section{
+        display: block;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+    }
+}
+
+@media (max-width: 990px){ /*https://stackoverflow.com/questions/12645366/css-responsive-center-div*/
+    .outline_big section{
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+    }
+    #headerthing section{
+        display: block;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+    }
+}
